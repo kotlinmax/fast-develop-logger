@@ -1,0 +1,64 @@
+node_modules
+config/production.*
+config/development.*
+/public/files
+/public/images
+dist
+*.log
+*.env
+.idea
+.vscode
+.DS_Store
+
+.keystone/admin
+keystone.db
+*.sublime-workspace
+
+# compiled output
+/dist
+/node_modules
+/build
+/pg_data
+/pg_data_dev
+/pg_data_test
+/pg_data_prod
+/pg_data_local
+/pg_data_stage
+
+
+.env
+.env.production
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS
+.DS_Store
+
+# Tests
+/coverage
+/.nyc_output
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+

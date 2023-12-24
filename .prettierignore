@@ -1,0 +1,13 @@
+# Ignore artifacts:
+build
+coverage
+admin
+.keystone
+public
+node_modules/
+.husky
+.vscode
+.github/
+# Ignore all HTML files:
+*.html
+

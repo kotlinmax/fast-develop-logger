@@ -1,0 +1,20 @@
+version: '3.9'
+
+services:
+  postgres:
+    env_file:
+      - .env.development
+    volumes:
+      - ./pg_data_dev:/var/lib/postgresql/data
+  app:
+    env_file:
+      - .env.development
+    command:
+      [
+        '/bin/bash',
+        '-c',
+        '/app/wait-for-it.sh --timeout=30 --strict postgres:$$POSTGRES_PORT && sleep 10 && npx node-pg-migrate up && yarn build && yarn start:dev',
+      ]
+
+volumes:
+  pg_data_dev:

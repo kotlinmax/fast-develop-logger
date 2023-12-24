@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15.3
+    ports:
+      - '${POSTGRES_PORT}:${POSTGRES_PORT}'
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '${HTTP_SERVER_PORT}:${HTTP_SERVER_PORT}'
+    depends_on:
+      - postgres
+    networks:
+      - app_network
+    profiles:
+      - production
+      - staging
+      - development
+
+volumes:
+  pg_data:
+
+networks:
+  app_network:
+    driver: bridge

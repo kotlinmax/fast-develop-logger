@@ -1,0 +1,11 @@
+version: '3.9'
+
+services:
+  postgres:
+    env_file:
+      - .env.testing
+    volumes:
+      - ./pg_data_test:/var/lib/postgresql/data
+
+volumes:
+  pg_data_test:

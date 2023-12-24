@@ -1,0 +1,30 @@
+name: Prettier Format
+
+on: push
+
+jobs:
+  prettier-format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '18.17.1'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run prettier
+        run: npx prettier --write .
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add -A
+          git commit -m "Apply Prettier formatting" -a || echo "No changes to commit"
+          git push
