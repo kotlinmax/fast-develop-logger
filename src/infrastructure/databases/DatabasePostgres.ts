@@ -1,4 +1,5 @@
-import {Pool} from 'pg';
+import {Pool, ClientBase} from 'pg';
+const {escapeLiteral} = require('pg');
 
 interface IPostgresConfig {
   user: string;
@@ -10,8 +11,10 @@ interface IPostgresConfig {
 
 export default class DatabasePostgres {
   protected pool: Pool;
+  protected escapeLiteral: (str: string) => string;
 
   constructor(config: IPostgresConfig) {
     this.pool = new Pool(config);
+    this.escapeLiteral = escapeLiteral;
   }
 }
