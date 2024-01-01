@@ -5,7 +5,7 @@ import {ILoggerFastify} from '../loggers/ILogger';
 
 const env = Environment.getEnv();
 
-export default class HttpFastifyServer implements IHttpServer {
+export default class HttpServer implements IHttpServer {
   private app: FastifyInstance;
 
   constructor(private logger: ILoggerFastify) {

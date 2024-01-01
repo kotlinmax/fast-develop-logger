@@ -2,15 +2,15 @@ import Environment from './infrastructure/env/Environment';
 
 Environment.init();
 
-import {IQueueConsumer, IModule} from './modules/ICommon';
-
-import PinoLogger from './infrastructure/loggers/PinoLogger';
-import HttpFastifyServer from './infrastructure/servers/HttpFastifyServer';
+import Logger from './infrastructure/loggers/Logger';
+import HttpServer from './infrastructure/servers/HttpServer';
 import LogRecordModule from './modules/LogRecord/LogRecordModule';
 
+import {IQueueConsumer, IModule} from './modules/ICommon';
+
 const env = Environment.getEnv();
-const logger = new PinoLogger();
-const httpServer = new HttpFastifyServer(logger);
+const logger = new Logger();
+const httpServer = new HttpServer(logger);
 
 // Create modules
 const logRecordModule = new LogRecordModule({logger, env});

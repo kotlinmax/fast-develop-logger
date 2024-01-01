@@ -3,7 +3,7 @@ import pino from 'pino';
 import {FastifyBaseLogger} from 'fastify';
 import {ILoggerFastify} from './ILogger';
 
-export default class PinoLogger implements ILoggerFastify {
+export default class Logger implements ILoggerFastify {
   private logger: FastifyBaseLogger;
 
   getLogger(): FastifyBaseLogger {

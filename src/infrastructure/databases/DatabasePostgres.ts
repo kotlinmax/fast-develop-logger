@@ -1,4 +1,4 @@
-import {Pool, ClientBase} from 'pg';
+import {Pool} from 'pg';
 const {escapeLiteral} = require('pg');
 
 interface IPostgresConfig {

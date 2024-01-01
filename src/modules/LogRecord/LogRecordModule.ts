@@ -1,15 +1,13 @@
 import {IQueueConsumer, IModule, IHttpRouter, IModuleConstructor} from '../ICommon';
-import {ILogger} from '../../infrastructure/loggers/ILogger';
-
 import {ILogRecordController} from './interfaces/ILogRecordController';
 import {ILogRecordRepository} from './interfaces/ILogRecordRepository';
 import {ILogRecordService} from './interfaces/ILogRecordService';
 
 import LogRecordController from './LogRecordController';
-import LogRecordRepositoryPostgres from './LogRecordRepositoryPostgres';
+import LogRecordRepository from './LogRecordRepository';
 import LogRecordRouter from './LogRecordRouter';
 import LogRecordService from './LogRecordService';
-import LogRecordConsumerKafka from './LogRecordConsumerKafka';
+import LogRecordConsumer from './LogRecordConsumer';
 
 export default class LogRecordModule implements IModule {
   repository: ILogRecordRepository;
@@ -19,11 +17,11 @@ export default class LogRecordModule implements IModule {
   consumers: IQueueConsumer[];
 
   constructor({logger, env}: IModuleConstructor) {
-    this.repository = new LogRecordRepositoryPostgres();
+    this.repository = new LogRecordRepository({env});
     this.service = new LogRecordService(this.repository);
     this.controller = new LogRecordController(this.service);
     this.router = new LogRecordRouter(this.controller);
-    this.consumers = [new LogRecordConsumerKafka({logger, env, service: this.service})];
+    this.consumers = [new LogRecordConsumer({logger, env, service: this.service})];
   }
 
   get tag() {

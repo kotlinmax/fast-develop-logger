@@ -1,17 +1,19 @@
 import DatabasePostgres from '../../infrastructure/databases/DatabasePostgres';
-import Environment from '../../infrastructure/env/Environment';
 
+import {IProcessEnv} from '../../infrastructure/env/IEnvironment';
 import {ILogRecordEntity} from './interfaces/ILogRecordEntity';
 import {ILogRecordRepository} from './interfaces/ILogRecordRepository';
 
-const env = Environment.getEnv();
+interface ILogRecordRepositoryPostgresConstructor {
+  env: IProcessEnv;
+}
 
-export default class LogRecordRepositoryPostgres extends DatabasePostgres implements ILogRecordRepository {
+export default class LogRecordRepository extends DatabasePostgres implements ILogRecordRepository {
   public get tag() {
     return 'LogRecordRepositoryPostgres';
   }
 
-  constructor() {
+  constructor({env}: ILogRecordRepositoryPostgresConstructor) {
     super({
       user: env.POSTGRES_USER,
       host: env.POSTGRES_SERVICE,

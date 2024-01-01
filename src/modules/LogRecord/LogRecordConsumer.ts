@@ -10,7 +10,7 @@ interface ILogRecordConsumerKafKaConstructor extends IQueueConsumerConstructor {
   service: ILogRecordService;
 }
 
-class LogRecordConsumerKafka extends QueueConsumerKafka implements IQueueConsumer {
+class LogRecordConsumer extends QueueConsumerKafka implements IQueueConsumer {
   private logger: ILogger;
   private service: ILogRecordService;
 
@@ -66,4 +66,4 @@ class LogRecordConsumerKafka extends QueueConsumerKafka implements IQueueConsume
   }
 }
 
-export default LogRecordConsumerKafka;
+export default LogRecordConsumer;
