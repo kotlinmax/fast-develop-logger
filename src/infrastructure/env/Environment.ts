@@ -22,6 +22,7 @@ export default class Environment {
       'LOGGER_CONSUMER_GROUP_ID',
       'LOGGER_CONSUMER_CLIENT_ID',
       'LOGGER_CONSUMER_TOPIC',
+      'BATCH_SIZE_LOG_RECORD',
     ];
 
     keys.forEach((key: keyof IExtraProcessEnv) => {

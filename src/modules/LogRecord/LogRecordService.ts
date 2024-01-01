@@ -1,29 +1,39 @@
+import {IProcessEnv} from '../../infrastructure/env/IEnvironment';
 import {ILogRecordEntity} from './interfaces/ILogRecordEntity';
 import {ILogRecordRepository} from './interfaces/ILogRecordRepository';
 import {ILogRecordService} from './interfaces/ILogRecordService';
 
+interface LogRecordServiceConstructor {
+  env: IProcessEnv;
+  repository: ILogRecordRepository;
+}
+
 export default class LogRecordService implements ILogRecordService {
-  constructor(private logRecordRepository: ILogRecordRepository) {}
+  private env: IProcessEnv;
+  private repository: ILogRecordRepository;
+
+  constructor({env, repository}: LogRecordServiceConstructor) {
+    this.env = env;
+    this.repository = repository;
+  }
 
   public get tag() {
     return 'LogRecordService';
   }
 
   getLogRecordById(id: string): Promise<ILogRecordEntity[]> {
-    return this.logRecordRepository.getById(id);
+    return this.repository.getById(id);
   }
 
-  createLogRecord(logRecord: ILogRecordEntity): Promise<{id: string}> {
+  createLogRecord(row: ILogRecordEntity): Promise<{id: string}> {
     throw new Error('Method not implemented.');
   }
 
-  createBatchLogRecords(logRecords: ILogRecordEntity[]): Promise<{id: string}[]> {
-    if (logRecords.length > 100) {
-      throw new Error(
-        `[${this.tag}] createBatchLogRecords: Batch of log records for insert to database must be 100 or less`
-      );
+  createBatchLogRecords(rows: ILogRecordEntity[]): Promise<{id: string}[]> {
+    if (rows.length > Number(this.env.BATCH_SIZE_LOG_RECORD)) {
+      throw new Error(`[${this.tag}] Batch of log records for insert to database must be 100 or less`);
     }
 
-    return this.logRecordRepository.createBatch(logRecords);
+    return this.repository.createBatch(rows);
   }
 }

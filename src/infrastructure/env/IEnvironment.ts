@@ -14,6 +14,7 @@ export type IExtraProcessEnv = {
   LOGGER_CONSUMER_GROUP_ID: string;
   LOGGER_CONSUMER_CLIENT_ID: string;
   LOGGER_CONSUMER_TOPIC: string;
+  BATCH_SIZE_LOG_RECORD: string;
 };
 
 export type IProcessEnv = IDefaultProcessEnv & IExtraProcessEnv;
