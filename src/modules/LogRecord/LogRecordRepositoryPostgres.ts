@@ -36,7 +36,7 @@ export default class LogRecordRepositoryPostgres extends DatabasePostgres implem
     const esc = this.escapeLiteral;
     const str = JSON.stringify;
 
-    const vls = rows.map((row: ILogRecordEntity) => {
+    const arr = rows.map((row: ILogRecordEntity) => {
       return `
         (
           ${esc(row.id)},
@@ -52,7 +52,7 @@ export default class LogRecordRepositoryPostgres extends DatabasePostgres implem
       `;
     });
 
-    const VALUES = `VALUES ${vls.join(',')} RETURNING "id"`;
+    const values = `VALUES ${arr.join(',')} RETURNING "id"`;
 
     const query = `
       INSERT INTO "LogRecord" (
@@ -66,7 +66,7 @@ export default class LogRecordRepositoryPostgres extends DatabasePostgres implem
         "data"        ,
         "extraData"
       )
-      ${VALUES};
+      ${values};
     `;
 
     const res = await this.pool.query<{id: string}>(query);
