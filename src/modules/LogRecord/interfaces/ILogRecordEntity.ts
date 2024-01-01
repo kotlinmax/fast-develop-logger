@@ -1,13 +1,11 @@
-// src/interfaces/models/ILogRecord.ts
-
 export interface ILogRecordEntity {
   id: string;
-  ip: string;
+  ipCustomer: string;
   timestamp: Date;
   level: string;
   message: string;
-  request: Record<string, unknown>;
-  response: Record<string, unknown>;
+  data: Record<string, unknown>;
+  extraData: Record<string, unknown>;
   handler: string;
   from: string;
 }

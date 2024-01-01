@@ -21,6 +21,11 @@ export default class LogRecordRepositoryPostgres extends DatabasePostgres implem
     });
   }
 
+  createBatch(logRecords: ILogRecordEntity[]): Promise<{id: string}[]> {
+    // TODO
+    throw new Error('Method not implemented.');
+  }
+
   async getById(id: string): Promise<ILogRecordEntity[]> {
     const query = `SELECT * FROM "LogRecord" WHERE "id" = $1;`;
     const res = await this.pool.query<ILogRecordEntity>(query, [id]);

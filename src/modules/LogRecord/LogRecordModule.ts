@@ -1,4 +1,4 @@
-import {IQueueConsumer, IModule, IHttpRouter} from '../ICommon';
+import {IQueueConsumer, IModule, IHttpRouter, IModuleConstructor} from '../ICommon';
 import {ILogger} from '../../infrastructure/loggers/ILogger';
 
 import {ILogRecordController} from './interfaces/ILogRecordController';
@@ -18,12 +18,12 @@ export default class LogRecordModule implements IModule {
   router: IHttpRouter;
   consumers: IQueueConsumer[];
 
-  constructor(private logger: ILogger) {
+  constructor({logger, env}: IModuleConstructor) {
     this.repository = new LogRecordRepositoryPostgres();
     this.service = new LogRecordService(this.repository);
     this.controller = new LogRecordController(this.service);
     this.router = new LogRecordRouter(this.controller);
-    this.consumers = [new LogRecordConsumerKafka(this.logger)];
+    this.consumers = [new LogRecordConsumerKafka({logger, env, service: this.service})];
   }
 
   get tag() {

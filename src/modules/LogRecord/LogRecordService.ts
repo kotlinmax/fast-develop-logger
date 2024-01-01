@@ -16,4 +16,14 @@ export default class LogRecordService implements ILogRecordService {
   createLogRecord(logRecord: ILogRecordEntity): Promise<{id: string}> {
     throw new Error('Method not implemented.');
   }
+
+  createBatchLogRecords(logRecords: ILogRecordEntity[]): Promise<{id: string}[]> {
+    if (logRecords.length > 100) {
+      throw new Error(
+        `[${this.tag}] createBatchLogRecords: Batch of log records for insert to database must be 100 or less`
+      );
+    }
+
+    return this.logRecordRepository.createBatch(logRecords);
+  }
 }

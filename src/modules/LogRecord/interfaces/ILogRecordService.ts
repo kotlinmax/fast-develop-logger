@@ -4,4 +4,5 @@ export interface ILogRecordService {
   tag: string;
   getLogRecordById(id: string): Promise<ILogRecordEntity[]>;
   createLogRecord(logRecord: ILogRecordEntity): Promise<{id: string}>;
+  createBatchLogRecords(logRecords: ILogRecordEntity[]): Promise<{id: string}[]>;
 }

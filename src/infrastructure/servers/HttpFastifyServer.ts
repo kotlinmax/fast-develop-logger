@@ -1,9 +1,10 @@
+import Environment from '../env/Environment';
 import fastify, {FastifyInstance} from 'fastify';
 import {IHttpServer, IHttpRoute} from './IHttpServer';
 import {ILoggerFastify} from '../loggers/ILogger';
-import {IProcessEnv} from '../env/IEnvironment';
 
-const env = process.env as IProcessEnv;
+const env = Environment.getEnv();
+
 export default class HttpFastifyServer implements IHttpServer {
   private app: FastifyInstance;
 

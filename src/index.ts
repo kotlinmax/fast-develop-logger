@@ -8,11 +8,12 @@ import PinoLogger from './infrastructure/loggers/PinoLogger';
 import HttpFastifyServer from './infrastructure/servers/HttpFastifyServer';
 import LogRecordModule from './modules/LogRecord/LogRecordModule';
 
+const env = Environment.getEnv();
 const logger = new PinoLogger();
 const httpServer = new HttpFastifyServer(logger);
 
 // Create modules
-const logRecordModule = new LogRecordModule(logger);
+const logRecordModule = new LogRecordModule({logger, env});
 
 const modules = [logRecordModule];
 
