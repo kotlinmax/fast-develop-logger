@@ -6,8 +6,6 @@ import Logger from './infrastructure/loggers/Logger';
 import HttpServer from './infrastructure/servers/HttpServer';
 import LogRecordModule from './modules/LogRecord/LogRecordModule';
 
-import {IQueueConsumer, IModule} from './modules/ICommon';
-
 const env = Environment.getEnv();
 const logger = new Logger();
 const httpServer = new HttpServer(logger);
@@ -18,8 +16,8 @@ const logRecordModule = new LogRecordModule({logger, env});
 const modules = [logRecordModule];
 
 function main() {
-  modules.forEach(({router, consumers}: IModule) => {
-    consumers.forEach((consumer: IQueueConsumer) => consumer.run());
+  modules.forEach(({router, consumers}) => {
+    consumers.forEach((consumer) => consumer.run());
     httpServer.registerRoutes(router.httpRoutes);
   });
 
