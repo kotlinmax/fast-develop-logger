@@ -1,19 +1,23 @@
 import {IProcessEnv} from '../../infrastructure/env/IEnvironment';
+import {ILogger} from '../../infrastructure/loggers/ILogger';
 import {ILogRecordEntity} from './interfaces/ILogRecordEntity';
 import {ILogRecordRepository} from './interfaces/ILogRecordRepository';
 import {ILogRecordService} from './interfaces/ILogRecordService';
 
 interface LogRecordServiceConstructor {
   env: IProcessEnv;
+  logger: ILogger;
   repository: ILogRecordRepository;
 }
 
 export default class LogRecordService implements ILogRecordService {
   private env: IProcessEnv;
   private repository: ILogRecordRepository;
+  private logger: ILogger;
 
-  constructor({env, repository}: LogRecordServiceConstructor) {
+  constructor({env, logger, repository}: LogRecordServiceConstructor) {
     this.env = env;
+    this.logger = logger;
     this.repository = repository;
   }
 
@@ -30,10 +34,6 @@ export default class LogRecordService implements ILogRecordService {
   }
 
   createBatchLogRecords(rows: ILogRecordEntity[]): Promise<{id: string}[]> {
-    if (rows.length > Number(this.env.BATCH_SIZE_LOG_RECORD)) {
-      throw new Error(`[${this.tag}] Batch of log records for insert to database must be 100 or less`);
-    }
-
     return this.repository.createBatch(rows);
   }
 }

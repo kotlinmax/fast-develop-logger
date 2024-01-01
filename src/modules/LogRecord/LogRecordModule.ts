@@ -18,10 +18,10 @@ export default class LogRecordModule implements IModule {
 
   constructor({logger, env}: IModuleConstructor) {
     this.repository = new LogRecordRepository({env});
-    this.service = new LogRecordService(this.repository);
+    this.service = new LogRecordService({env, logger, repository: this.repository});
     this.controller = new LogRecordController(this.service);
     this.router = new LogRecordRouter(this.controller);
-    this.consumers = [new LogRecordConsumer({logger, env, service: this.service})];
+    this.consumers = [new LogRecordConsumer({env, logger, service: this.service})];
   }
 
   get tag() {

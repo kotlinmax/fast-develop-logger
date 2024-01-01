@@ -1,3 +1,4 @@
+import {QueryResult} from 'pg';
 import DatabasePostgres from '../../infrastructure/databases/DatabasePostgres';
 
 import {IProcessEnv} from '../../infrastructure/env/IEnvironment';
@@ -9,9 +10,7 @@ interface ILogRecordRepositoryPostgresConstructor {
 }
 
 export default class LogRecordRepository extends DatabasePostgres implements ILogRecordRepository {
-  public get tag() {
-    return 'LogRecordRepositoryPostgres';
-  }
+  private env: IProcessEnv;
 
   constructor({env}: ILogRecordRepositoryPostgresConstructor) {
     super({
@@ -21,6 +20,12 @@ export default class LogRecordRepository extends DatabasePostgres implements ILo
       port: Number(env.POSTGRES_PORT),
       max: Number(env.POSTGRES_MAX),
     });
+
+    this.env = env;
+  }
+
+  public get tag() {
+    return 'LogRecordRepositoryPostgres';
   }
 
   async getById(id: string): Promise<ILogRecordEntity[]> {
@@ -35,6 +40,10 @@ export default class LogRecordRepository extends DatabasePostgres implements ILo
   }
 
   async createBatch(rows: ILogRecordEntity[]): Promise<{id: string}[]> {
+    if (rows.length > Number(this.env.BATCH_SIZE_LOG_RECORD)) {
+      throw new Error(`[${this.tag}] Batch of log records for insert to database must be 100 or less`);
+    }
+
     const esc = this.escapeLiteral;
     const str = JSON.stringify;
 
@@ -54,9 +63,9 @@ export default class LogRecordRepository extends DatabasePostgres implements ILo
       `;
     });
 
-    const values = `VALUES ${arr.join(',')} RETURNING "id"`;
+    const values: string = `VALUES ${arr.join(',')} RETURNING "id"`;
 
-    const query = `
+    const query: string = `
       INSERT INTO "LogRecord" (
         "id"          ,
         "timestamp"   ,
@@ -71,7 +80,7 @@ export default class LogRecordRepository extends DatabasePostgres implements ILo
       ${values};
     `;
 
-    const res = await this.pool.query<{id: string}>(query);
+    const res: QueryResult<{id: string}> = await this.pool.query(query);
 
     return res.rows;
   }
