@@ -1,7 +1,9 @@
 import {type EachMessagePayload, type KafkaMessage} from 'kafkajs';
+
 import {IHttpRoute} from '../infrastructure/servers/IHttpServer';
 import {ILogger} from '../infrastructure/loggers/ILogger';
 import {IProcessEnv} from '../infrastructure/env/IEnvironment';
+import {IDatabaseSQL} from '../infrastructure/databases/IDatabase';
 
 /**
  * Here are only the general interfaces that are required in the modules
@@ -20,6 +22,7 @@ export interface IHttpRouter {
 export interface IModuleConstructor {
   logger: ILogger;
   env: IProcessEnv;
+  db: IDatabaseSQL<any>;
 }
 
 export interface IModule {

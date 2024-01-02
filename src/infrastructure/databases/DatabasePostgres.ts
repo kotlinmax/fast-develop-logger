@@ -1,20 +1,33 @@
-import {Pool} from 'pg';
-const {escapeLiteral} = require('pg');
+import {Pool, PoolClient, PoolConfig} from 'pg';
+import {IDatabaseSQL} from './IDatabase';
 
-interface IPostgresConfig {
-  user: string;
-  host: string;
-  password: string;
-  port: number;
-  max: number;
-}
+export default class DatabasePostgres implements IDatabaseSQL<PoolClient> {
+  private pool: Pool;
+  public escapeLiteral: (str: string) => string;
 
-export default class DatabasePostgres {
-  protected pool: Pool;
-  protected escapeLiteral: (str: string) => string;
-
-  constructor(config: IPostgresConfig) {
+  constructor(config: PoolConfig) {
     this.pool = new Pool(config);
-    this.escapeLiteral = escapeLiteral;
+    this.escapeLiteral = require('pg').escapeLiteral;
+  }
+
+  async query<T>(sql: string, values: unknown[] = []): Promise<T[]> {
+    const res = await this.pool.query(sql, values);
+    return res.rows;
+  }
+
+  async beginTransaction(): Promise<PoolClient> {
+    const client = await this.pool.connect();
+    await client.query('BEGIN');
+    return client;
+  }
+
+  async commit(client: PoolClient): Promise<void> {
+    await client.query('COMMIT');
+    client.release();
+  }
+
+  async rollback(client: PoolClient): Promise<void> {
+    await client.query('ROLLBACK');
+    client.release();
   }
 }

@@ -1,27 +1,21 @@
-import {QueryResult} from 'pg';
-import DatabasePostgres from '../../infrastructure/databases/DatabasePostgres';
-
+import {type PoolClient} from 'pg';
+import {IDatabaseSQL} from '../../infrastructure/databases/IDatabase';
 import {IProcessEnv} from '../../infrastructure/env/IEnvironment';
 import {ILogRecordEntity} from './interfaces/ILogRecordEntity';
 import {ILogRecordRepository} from './interfaces/ILogRecordRepository';
 
 interface ILogRecordRepositoryPostgresConstructor {
   env: IProcessEnv;
+  db: IDatabaseSQL<PoolClient>;
 }
 
-export default class LogRecordRepository extends DatabasePostgres implements ILogRecordRepository {
+export default class LogRecordRepository implements ILogRecordRepository {
   private env: IProcessEnv;
+  private db: IDatabaseSQL<PoolClient>;
 
-  constructor({env}: ILogRecordRepositoryPostgresConstructor) {
-    super({
-      user: env.POSTGRES_USER,
-      host: env.POSTGRES_SERVICE,
-      password: env.POSTGRES_PASSWORD,
-      port: Number(env.POSTGRES_PORT),
-      max: Number(env.POSTGRES_MAX),
-    });
-
+  constructor({db, env}: ILogRecordRepositoryPostgresConstructor) {
     this.env = env;
+    this.db = db;
   }
 
   public get tag() {
@@ -30,12 +24,13 @@ export default class LogRecordRepository extends DatabasePostgres implements ILo
 
   async getById(id: string): Promise<ILogRecordEntity[]> {
     const query = `SELECT * FROM "LogRecord" WHERE "id" = $1;`;
-    const res = await this.pool.query<ILogRecordEntity>(query, [id]);
-
-    return res.rows;
+    const items = await this.db.query<ILogRecordEntity>(query, [id]);
+    return items;
   }
 
   async create(logRecord: ILogRecordEntity): Promise<{id: string}> {
+    const client = await this.db.beginTransaction();
+
     return {id: 'testId'};
   }
 
@@ -44,20 +39,20 @@ export default class LogRecordRepository extends DatabasePostgres implements ILo
       throw new Error(`[${this.tag}] Batch of log records for insert to database must be 100 or less`);
     }
 
-    const esc = this.escapeLiteral;
+    const esc = this.db.escapeLiteral;
     const str = JSON.stringify;
 
     const arr = rows.map((row: ILogRecordEntity) => {
       return `
         (
-          ${esc(row.id)},
+          ${esc(row.id)}                  ,
           ${esc(row.timestamp.toString())},
-          ${esc(row.ipCustomer)},
-          ${esc(row.level)},
-          ${esc(row.message)},
-          ${esc(row.handler)},
-          ${esc(row.from)},
-          ${esc(str(row.data))},
+          ${esc(row.ipCustomer)}          ,
+          ${esc(row.level)}               ,
+          ${esc(row.message)}             ,
+          ${esc(row.handler)}             ,
+          ${esc(row.from)}                ,
+          ${esc(str(row.data))}           ,
           ${esc(str(row.extraData))}
         )
       `;
@@ -80,8 +75,8 @@ export default class LogRecordRepository extends DatabasePostgres implements ILo
       ${values};
     `;
 
-    const res: QueryResult<{id: string}> = await this.pool.query(query);
+    const items = await this.db.query<{id: string}>(query);
 
-    return res.rows;
+    return items;
   }
 }

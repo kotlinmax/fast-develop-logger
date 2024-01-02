@@ -16,8 +16,8 @@ export default class LogRecordModule implements IModule {
   router: IHttpRouter;
   consumers: IQueueConsumer[];
 
-  constructor({logger, env}: IModuleConstructor) {
-    this.repository = new LogRecordRepository({env});
+  constructor({db, env, logger}: IModuleConstructor) {
+    this.repository = new LogRecordRepository({env, db});
     this.service = new LogRecordService({env, logger, repository: this.repository});
     this.controller = new LogRecordController(this.service);
     this.router = new LogRecordRouter(this.controller);
