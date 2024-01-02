@@ -29,7 +29,14 @@ export default class LogRecordRepository implements ILogRecordRepository {
   }
 
   async create(logRecord: ILogRecordEntity): Promise<{id: string}> {
-    const client = await this.db.beginTransaction();
+    const trx = await this.db.transaction();
+
+    await trx.begin();
+    await trx.query('SELECT 1;');
+    await trx.query('SELECT 2;');
+    await trx.commit();
+
+    trx.release();
 
     return {id: 'testId'};
   }

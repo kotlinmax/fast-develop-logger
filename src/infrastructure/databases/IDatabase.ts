@@ -1,7 +1,15 @@
+import {QueryResult} from 'pg';
+
 export interface IDatabaseSQL<Client> {
   escapeLiteral: (str: string) => string;
   query<T>(sql: string, values?: unknown[]): Promise<T[]>;
-  beginTransaction(): Promise<Client>;
-  commit(client: Client): Promise<void>;
-  rollback(client: Client): Promise<void>;
+  transaction(): Promise<ITransactionDB>;
+}
+
+export interface ITransactionDB {
+  begin: () => Promise<unknown>;
+  commit: () => Promise<unknown>;
+  rollback: () => Promise<unknown>;
+  query: <T>(sql: string, values?: unknown[]) => Promise<T[]>;
+  release: () => void;
 }

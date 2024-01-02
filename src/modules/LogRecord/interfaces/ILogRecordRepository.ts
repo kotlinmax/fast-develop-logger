@@ -1,5 +1,3 @@
-import {PoolClient} from 'pg';
-import {IDatabaseSQL} from '../../../infrastructure/databases/IDatabase';
 import {ILogRecordEntity} from './ILogRecordEntity';
 
 export interface ILogRecordRepository {

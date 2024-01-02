@@ -1,5 +1,5 @@
 import {Pool, PoolClient, PoolConfig} from 'pg';
-import {IDatabaseSQL} from './IDatabase';
+import {ITransactionDB, IDatabaseSQL} from './IDatabase';
 
 export default class DatabasePostgres implements IDatabaseSQL<PoolClient> {
   private pool: Pool;
@@ -15,19 +15,19 @@ export default class DatabasePostgres implements IDatabaseSQL<PoolClient> {
     return res.rows;
   }
 
-  async beginTransaction(): Promise<PoolClient> {
-    const client = await this.pool.connect();
-    await client.query('BEGIN');
-    return client;
-  }
+  async transaction(): Promise<ITransactionDB> {
+    const connect = await this.pool.connect();
 
-  async commit(client: PoolClient): Promise<void> {
-    await client.query('COMMIT');
-    client.release();
-  }
+    const begin = () => connect.query('BEGIN');
+    const commit = () => connect.query('COMMIT');
+    const rollback = () => connect.query('ROLLBACK');
+    const release = () => connect.release();
 
-  async rollback(client: PoolClient): Promise<void> {
-    await client.query('ROLLBACK');
-    client.release();
+    const query = async <T>(sql: string, values?: unknown[]): Promise<T[]> => {
+      const res = await connect.query(sql, values);
+      return res.rows;
+    };
+
+    return {begin, commit, rollback, release, query};
   }
 }
