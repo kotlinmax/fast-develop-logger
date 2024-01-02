@@ -1,4 +1,3 @@
-import {type PoolClient} from 'pg';
 import {IDatabaseSQL} from '../../infrastructure/databases/IDatabase';
 import {IProcessEnv} from '../../infrastructure/env/IEnvironment';
 import {ILogRecordEntity} from './interfaces/ILogRecordEntity';
@@ -6,12 +5,12 @@ import {ILogRecordRepository} from './interfaces/ILogRecordRepository';
 
 interface ILogRecordRepositoryPostgresConstructor {
   env: IProcessEnv;
-  db: IDatabaseSQL<PoolClient>;
+  db: IDatabaseSQL;
 }
 
 export default class LogRecordRepository implements ILogRecordRepository {
   private env: IProcessEnv;
-  private db: IDatabaseSQL<PoolClient>;
+  private db: IDatabaseSQL;
 
   constructor({db, env}: ILogRecordRepositoryPostgresConstructor) {
     this.env = env;

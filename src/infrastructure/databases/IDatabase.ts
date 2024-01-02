@@ -1,6 +1,4 @@
-import {QueryResult} from 'pg';
-
-export interface IDatabaseSQL<Client> {
+export interface IDatabaseSQL {
   escapeLiteral: (str: string) => string;
   query<T>(sql: string, values?: unknown[]): Promise<T[]>;
   transaction(): Promise<ITransactionDB>;
