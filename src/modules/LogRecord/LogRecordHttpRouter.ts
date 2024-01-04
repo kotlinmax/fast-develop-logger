@@ -1,15 +1,15 @@
-import {IHttpRoute} from '../../infrastructure/servers/IHttpServer';
+import {IHttpRoute} from '../../infrastructure/servers/interfaces/IHttpServer';
 import {IHttpRouter} from '../ICommon';
-import {ILogRecordController} from './interfaces/ILogRecordController';
+import {ILogRecordHttpController} from './interfaces/ILogRecordController';
 
-export default class LogRecordRouter implements IHttpRouter {
-  constructor(private controller: ILogRecordController) {}
+export default class LogRecordHttpRouter implements IHttpRouter {
+  constructor(private controller: ILogRecordHttpController) {}
 
   public get tag() {
     return 'LogRecordRouter';
   }
 
-  public get httpRoutes(): IHttpRoute[] {
+  public get routes(): IHttpRoute[] {
     return [
       {
         url: '/log-record',

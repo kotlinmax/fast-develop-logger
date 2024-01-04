@@ -1,4 +1,4 @@
-import {IHttpRequest, IHttpResponse} from '../../infrastructure/servers/IHttpServer';
+import {IHttpRequest, IHttpResponse} from '../../infrastructure/servers/interfaces/IHttpServer';
 
 export default class AppHealthController {
   constructor() {}

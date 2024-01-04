@@ -1,12 +1,12 @@
 import Environment from '../env/Environment';
 import fastify, {FastifyInstance} from 'fastify';
-import {IHttpServer, IHttpRoute} from './IHttpServer';
+import {IHttpServer, IHttpRoute} from './interfaces/IHttpServer';
 import {ILoggerFastify} from '../loggers/ILogger';
 
 const env = Environment.getEnv();
 
 export default class HttpServer implements IHttpServer {
-  private app: FastifyInstance;
+  public app: FastifyInstance;
 
   constructor(private logger: ILoggerFastify) {
     this.app = fastify({logger: logger.getLogger()});
@@ -15,7 +15,7 @@ export default class HttpServer implements IHttpServer {
   public registerRoutes(routes: IHttpRoute[]) {
     routes.forEach((route: IHttpRoute) => {
       this.app.route(route);
-      this.logger.info(`[HttpServer] Start route: ${route.method} '${route.url}'`);
+      this.logger.info(`[http] Start route: ${route.method} '${route.url}'`);
     });
   }
 

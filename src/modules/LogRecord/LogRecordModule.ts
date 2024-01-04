@@ -1,26 +1,38 @@
-import {IQueueConsumer, IModule, IHttpRouter, IModuleConstructor} from '../ICommon';
-import {ILogRecordController} from './interfaces/ILogRecordController';
+import {IQueueConsumer, IModule, IHttpRouter, IModuleConstructor, IWebSocketRouter} from '../ICommon';
+import {ILogRecordHttpController, ILogRecordWebSocketController} from './interfaces/ILogRecordController';
 import {ILogRecordRepository} from './interfaces/ILogRecordRepository';
 import {ILogRecordService} from './interfaces/ILogRecordService';
 
-import LogRecordController from './LogRecordController';
+import LogRecordController from './LogRecordHttpController';
 import LogRecordRepository from './LogRecordRepository';
-import LogRecordRouter from './LogRecordRouter';
+import LogRecordHttpRouter from './LogRecordHttpRouter';
 import LogRecordService from './LogRecordService';
 import LogRecordConsumer from './LogRecordConsumer';
+import LogRecordControllerWS from './LogRecordWebSocketController';
+import LogRecordWebSocketRouter from './LogRecordWebsocketRouter';
 
 export default class LogRecordModule implements IModule {
   repository: ILogRecordRepository;
   service: ILogRecordService;
-  controller: ILogRecordController;
-  router: IHttpRouter;
+
+  httpController: ILogRecordHttpController;
+  httpRouter: IHttpRouter;
+
+  wsController: ILogRecordWebSocketController;
+  wsRouter: IWebSocketRouter;
+
   consumers: IQueueConsumer[];
 
   constructor({db, env, logger}: IModuleConstructor) {
     this.repository = new LogRecordRepository({env, db});
     this.service = new LogRecordService({env, logger, repository: this.repository});
-    this.controller = new LogRecordController(this.service);
-    this.router = new LogRecordRouter(this.controller);
+
+    this.httpController = new LogRecordController(this.service);
+    this.httpRouter = new LogRecordHttpRouter(this.httpController);
+
+    this.wsController = new LogRecordControllerWS(this.service);
+    this.wsRouter = new LogRecordWebSocketRouter(this.wsController);
+
     this.consumers = [new LogRecordConsumer({env, logger, service: this.service})];
   }
 

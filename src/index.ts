@@ -6,6 +6,7 @@ const env = Environment.getEnv();
 
 import Logger from './infrastructure/loggers/Logger';
 import HttpServer from './infrastructure/servers/HttpServer';
+import WebSocketServer from './infrastructure/servers/WebSocketServer';
 import LogRecordModule from './modules/LogRecord/LogRecordModule';
 
 const db = new DatabasePostgres({
@@ -17,21 +18,24 @@ const db = new DatabasePostgres({
 });
 
 const logger = new Logger();
+
 const httpServer = new HttpServer(logger);
-const infrastructure = {db, env, logger};
+const wsServer = new WebSocketServer({logger, httpServer});
 
 // Create modules
-const logRecordModule = new LogRecordModule(infrastructure);
+const logRecordModule = new LogRecordModule({db, env, logger});
 
 const modules = [logRecordModule];
 
 function main() {
-  modules.forEach(({router, consumers}) => {
+  modules.forEach(({httpRouter, wsRouter, consumers}) => {
     consumers.forEach((consumer) => consumer.run());
-    httpServer.registerRoutes(router.httpRoutes);
+    httpServer.registerRoutes(httpRouter.routes);
+    wsServer.registerRoutes(wsRouter.routes);
   });
 
   httpServer.start();
+  wsServer.start();
 
   process.on('unhandledRejection', (err) => {
     logger.fatal(`Unhandled Rejection at: ${err}`);

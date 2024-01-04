@@ -14,30 +14,37 @@ export default class Logger implements ILoggerFastify {
     this.logger = pino({
       level: 'trace',
       transport: {target: 'pino-pretty', options: {colorize: true}},
+      serializers: {
+        func: (value) => value.toString(),
+      },
     });
   }
 
-  info(msg: string): void {
-    this.logger.info(msg);
+  info<T extends object>(data: T, msg?: string, ...args: any[]): void;
+  info(data: unknown, msg?: string, ...args: any[]): void;
+  info(data: string, ...args: any[]): void {
+    this.logger.info(data, ...args);
   }
 
-  debug(msg: string): void {
-    this.logger.debug(msg);
+  debug<T extends object>(data: T, msg?: string, ...args: any[]): void;
+  debug(data: unknown, msg?: string, ...args: any[]): void;
+  debug(data: string, ...args: any[]): void {
+    this.logger.debug(data, ...args);
   }
 
-  error(msg: string): void {
-    this.logger.error(msg);
+  error(data: unknown): void {
+    this.logger.error(data);
   }
 
-  fatal(msg: string): void {
-    this.logger.fatal(msg);
+  fatal(data: unknown): void {
+    this.logger.fatal(data);
   }
 
-  trace(msg: string): void {
-    this.logger.trace(msg);
+  trace(data: unknown): void {
+    this.logger.trace(data);
   }
 
-  warn(msg: string): void {
-    this.logger.warn(msg);
+  warn(data: unknown): void {
+    this.logger.warn(data);
   }
 }

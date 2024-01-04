@@ -7,7 +7,10 @@ export default class Environment {
   }
 
   static init() {
-    console.log('TEST');
+    if (process.env.NODE_ENV === undefined) {
+      throw new Error(`process.env.NODE_ENV is undefined`);
+    }
+
     envConfig({path: `.env.${process.env.NODE_ENV}`});
 
     const keys: (keyof IExtraProcessEnv)[] = [
@@ -18,11 +21,11 @@ export default class Environment {
       'POSTGRES_PASSWORD',
       'POSTGRES_PORT',
       'POSTGRES_MAX',
-      'LOGGER_CONSUMER_BROKER',
-      'LOGGER_CONSUMER_GROUP_ID',
-      'LOGGER_CONSUMER_CLIENT_ID',
-      'LOGGER_CONSUMER_TOPIC',
-      'BATCH_SIZE_LOG_RECORD',
+      'LOG_RECORD_CONSUMER_BROKER',
+      'LOG_RECORD_CONSUMER_GROUP_ID',
+      'LOG_RECORD_CONSUMER_CLIENT_ID',
+      'LOG_RECORD_CONSUMER_TOPIC',
+      'LOG_RECORD_BATCH_SIZE',
     ];
 
     keys.forEach((key: keyof IExtraProcessEnv) => {

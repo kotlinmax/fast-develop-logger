@@ -18,31 +18,18 @@ export default class LogRecordRepository implements ILogRecordRepository {
   }
 
   public get tag() {
-    return 'LogRecordRepositoryPostgres';
+    return 'LogRecordRepository';
   }
 
   async getById(id: string): Promise<ILogRecordEntity[]> {
-    const query = `SELECT * FROM "LogRecord" WHERE "id" = $1;`;
+    const query = `SELECT * FROM "LogRecords" WHERE "id" = $1;`;
     const items = await this.db.query<ILogRecordEntity>(query, [id]);
     return items;
   }
 
-  async create(logRecord: ILogRecordEntity): Promise<{id: string}> {
-    const trx = await this.db.transaction();
-
-    await trx.begin();
-    await trx.query('SELECT 1;');
-    await trx.query('SELECT 2;');
-    await trx.commit();
-
-    trx.release();
-
-    return {id: 'testId'};
-  }
-
   async createBatch(rows: ILogRecordEntity[]): Promise<{id: string}[]> {
-    if (rows.length > Number(this.env.BATCH_SIZE_LOG_RECORD)) {
-      throw new Error(`[${this.tag}] Batch of log records for insert to database must be 100 or less`);
+    if (rows.length > Number(this.env.LOG_RECORD_BATCH_SIZE)) {
+      throw new Error(` -> [${this.tag}] createBatch: Batch of log records for insert to database must be 100 or less`);
     }
 
     const esc = this.db.escapeLiteral;
@@ -81,8 +68,8 @@ export default class LogRecordRepository implements ILogRecordRepository {
       ${values};
     `;
 
-    const items = await this.db.query<{id: string}>(query);
+    const ids = await this.db.query<{id: string}>(query);
 
-    return items;
+    return ids;
   }
 }

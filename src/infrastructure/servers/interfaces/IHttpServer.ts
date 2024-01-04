@@ -6,6 +6,7 @@ export interface IHttpResponse extends FastifyReply {}
 export interface IHttpRoute extends RouteOptions {}
 
 export interface IHttpServer {
+  app: FastifyInstance;
   registerRoutes: (routes: IHttpRoute[]) => void;
   start: () => Promise<void>;
 }

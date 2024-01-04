@@ -10,11 +10,11 @@ export type IExtraProcessEnv = {
   POSTGRES_PASSWORD: string;
   POSTGRES_PORT: string;
   POSTGRES_MAX: string;
-  LOGGER_CONSUMER_BROKER: string;
-  LOGGER_CONSUMER_GROUP_ID: string;
-  LOGGER_CONSUMER_CLIENT_ID: string;
-  LOGGER_CONSUMER_TOPIC: string;
-  BATCH_SIZE_LOG_RECORD: string;
+  LOG_RECORD_CONSUMER_BROKER: string;
+  LOG_RECORD_CONSUMER_GROUP_ID: string;
+  LOG_RECORD_CONSUMER_CLIENT_ID: string;
+  LOG_RECORD_CONSUMER_TOPIC: string;
+  LOG_RECORD_BATCH_SIZE: string;
 };
 
 export type IProcessEnv = IDefaultProcessEnv & IExtraProcessEnv;

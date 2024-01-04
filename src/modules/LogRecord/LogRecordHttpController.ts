@@ -1,10 +1,10 @@
 // src/controllers/LogRecordController.ts
 
-import {IHttpRequest, IHttpResponse} from '../../infrastructure/servers/IHttpServer';
-import {ILogRecordController} from './interfaces/ILogRecordController';
+import {IHttpRequest, IHttpResponse} from '../../infrastructure/servers/interfaces/IHttpServer';
+import {ILogRecordHttpController} from './interfaces/ILogRecordController';
 import {ILogRecordService} from './interfaces/ILogRecordService';
 
-export default class LogRecordController implements ILogRecordController {
+export default class LogRecordHttpController implements ILogRecordHttpController {
   constructor(private logRecordService: ILogRecordService) {}
 
   public get tag() {
@@ -18,4 +18,5 @@ export default class LogRecordController implements ILogRecordController {
   public async createLogRecord(req: IHttpRequest, res: IHttpResponse): Promise<void> {
     res.code(200).header('Content-Type', 'application/json; charset=utf-8').send({status: 'ok'});
   }
+  public async handleWebSocketMessage(): Promise<void> {}
 }

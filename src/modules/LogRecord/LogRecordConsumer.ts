@@ -22,10 +22,10 @@ class LogRecordConsumer extends QueueConsumerKafka implements IQueueConsumer {
 
   constructor({env, logger, service}: ILogRecordConsumerKafKaConstructor) {
     super({
-      brokers: [env.LOGGER_CONSUMER_BROKER],
-      groupId: env.LOGGER_CONSUMER_GROUP_ID,
-      clientId: env.LOGGER_CONSUMER_CLIENT_ID,
-      topic: env.LOGGER_CONSUMER_TOPIC,
+      brokers: [env.LOG_RECORD_CONSUMER_BROKER],
+      groupId: env.LOG_RECORD_CONSUMER_GROUP_ID,
+      clientId: env.LOG_RECORD_CONSUMER_CLIENT_ID,
+      topic: env.LOG_RECORD_CONSUMER_TOPIC,
     });
 
     this.logger = logger;
@@ -33,7 +33,7 @@ class LogRecordConsumer extends QueueConsumerKafka implements IQueueConsumer {
   }
 
   public get tag() {
-    return 'LogRecordQueueConsumerKafka';
+    return '[LogRecordQueueConsumerKafka]';
   }
 
   override async eachMessageHandler(payload: IEachMessagePayload): Promise<void> {
@@ -58,10 +58,11 @@ class LogRecordConsumer extends QueueConsumerKafka implements IQueueConsumer {
         this.batch = [];
         this.lastQueueMessageTime = Date.now();
 
-        await this.service.createBatchLogRecords(this.batch);
+        const ids = await this.service.createBatchLogRecords(this.batch);
+        this.logger.debug(`${this.tag}: created success: ${ids}`);
       }
     } catch (error) {
-      this.logger.error(`[${this.tag}]: EachMessageHandler error: ${error}`);
+      this.logger.error(`${this.tag}: EachMessageHandler error: ${error}`);
     }
   }
 }
