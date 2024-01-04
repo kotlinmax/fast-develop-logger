@@ -33,12 +33,14 @@ export default class WebSocketServer implements IWebSocketServer {
     this.wss.on('connection', async (ws, req) => {
       this.logger.debug('Some connected to web socket server');
 
-      if (!req.url) {
+      const domain = req.url;
+
+      if (!domain) {
         ws.close();
         return;
       }
 
-      const handlers = this.routes[req.url];
+      const handlers = this.routes[domain];
 
       if (!handlers) {
         ws.close();
@@ -48,7 +50,7 @@ export default class WebSocketServer implements IWebSocketServer {
       const subscribeDatabaseNotification = handlers.subscribeDatabaseNotification;
 
       if (subscribeDatabaseNotification) {
-        const unsubscribe = await subscribeDatabaseNotification(req.url, (data) => {
+        const unsubscribe = await subscribeDatabaseNotification(domain, (data) => {
           ws.send(JSON.stringify(data));
         });
 
