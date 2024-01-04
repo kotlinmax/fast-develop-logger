@@ -21,7 +21,7 @@ export default class WebSocketServer implements IWebSocketServer {
 
   public registerRoutes(routes: IWebSocketRoutes) {
     this.routes = routes;
-    this.logger.info(`[wss] registered routes is success`);
+    this.logger.info(`[wss] routes registered`);
   }
 
   public async start() {
@@ -30,34 +30,38 @@ export default class WebSocketServer implements IWebSocketServer {
       this.logger.info(`[wss] web socket server is start on ${addressInfo?.address}:${addressInfo.port}`);
     });
 
-    this.wss.on('connection', (ws, req) => {
-      this.logger.debug('Some connected');
+    this.wss.on('connection', async (ws, req) => {
+      this.logger.debug('Some connected to web socket server');
 
       if (!req.url) {
         ws.close();
         return;
       }
 
-      const handlerMap = this.routes[req.url];
+      const handlers = this.routes[req.url];
 
-      if (!handlerMap) {
+      if (!handlers) {
         ws.close();
         return;
       }
 
+      const subscribeDatabaseNotification = handlers.subscribeDatabaseNotification;
+
+      if (subscribeDatabaseNotification) {
+        const unsubscribe = await subscribeDatabaseNotification(req.url, (data) => {
+          ws.send(JSON.stringify(data));
+        });
+
+        ws.on('close', unsubscribe);
+        ws.on('error', unsubscribe);
+      }
+
       ws.on('message', async (message) => {
         this.logger.debug('Some send message');
+      });
 
-        const msg = JSON.parse(message.toString()) as {action: string};
-        const handler = handlerMap[msg.action];
-
-        if (!handler) {
-          ws.send('Unknown action');
-          return;
-        }
-
-        const data = await handler();
-        ws.send(JSON.stringify(data));
+      ws.on('close', () => {
+        this.logger.error(`[WebsocketServer]: closed`);
       });
 
       ws.on('error', (err) => {

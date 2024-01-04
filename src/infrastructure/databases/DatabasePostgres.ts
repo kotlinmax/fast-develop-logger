@@ -1,5 +1,6 @@
 import {Pool, PoolConfig} from 'pg';
 import {ITransactionDB, IDatabaseSQL} from './IDatabase';
+import {TWebSocketCallback, TWebSocketUnsubscribe} from '../servers/interfaces/IWebSocketServer';
 
 export default class DatabasePostgres implements IDatabaseSQL {
   private pool: Pool;
@@ -29,5 +30,20 @@ export default class DatabasePostgres implements IDatabaseSQL {
     };
 
     return {begin, commit, rollback, release, query};
+  }
+
+  async subscribeDatabaseNotification(channel: string, callback: TWebSocketCallback): TWebSocketUnsubscribe {
+    const connection = await this.pool.connect();
+
+    connection.on('notification', callback);
+    await connection.query(`LISTEN ${channel}`);
+
+    const unsubscribe = async () => {
+      await connection.query(`UNLISTEN ${channel}`);
+      connection.removeAllListeners('notification');
+      connection.release();
+    };
+
+    return unsubscribe;
   }
 }

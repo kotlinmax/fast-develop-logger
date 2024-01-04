@@ -21,7 +21,7 @@ abstract class QueueConsumerKafka {
 
   public async run() {
     await this.consumer.connect();
-    await this.consumer.subscribe({topic: this.topic, fromBeginning: true});
+    await this.consumer.subscribeDatabaseNotification({topic: this.topic, fromBeginning: true});
     await this.consumer.run({eachMessage: this.eachMessageHandler.bind(this)});
   }
 

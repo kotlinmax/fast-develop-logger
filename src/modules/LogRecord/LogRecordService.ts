@@ -1,5 +1,6 @@
 import {IProcessEnv} from '../../infrastructure/env/IEnvironment';
 import {ILogger} from '../../infrastructure/loggers/ILogger';
+import {TWebSocketCallback} from '../../infrastructure/servers/interfaces/IWebSocketServer';
 import {ILogRecordEntity} from './interfaces/ILogRecordEntity';
 import {ILogRecordRepository} from './interfaces/ILogRecordRepository';
 import {ILogRecordService} from './interfaces/ILogRecordService';
@@ -23,6 +24,10 @@ export default class LogRecordService implements ILogRecordService {
 
   public get tag() {
     return 'LogRecordService';
+  }
+
+  public subscribeDatabaseNotification(channel: string, callback: TWebSocketCallback) {
+    return this.repository.subscribeDatabaseNotification(channel, callback);
   }
 
   getLogRecordById(id: string): Promise<ILogRecordEntity[]> {

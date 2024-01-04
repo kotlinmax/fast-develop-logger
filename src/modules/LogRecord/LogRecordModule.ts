@@ -8,8 +8,8 @@ import LogRecordRepository from './LogRecordRepository';
 import LogRecordHttpRouter from './LogRecordHttpRouter';
 import LogRecordService from './LogRecordService';
 import LogRecordConsumer from './LogRecordConsumer';
-import LogRecordControllerWS from './LogRecordWebSocketController';
-import LogRecordWebSocketRouter from './LogRecordWebsocketRouter';
+import LogRecordWebSocketController from './LogRecordWebSocketController';
+import LogRecordWebSocketRouter from './LogRecordWebSocketRouter';
 
 export default class LogRecordModule implements IModule {
   repository: ILogRecordRepository;
@@ -30,7 +30,7 @@ export default class LogRecordModule implements IModule {
     this.httpController = new LogRecordController(this.service);
     this.httpRouter = new LogRecordHttpRouter(this.httpController);
 
-    this.wsController = new LogRecordControllerWS(this.service);
+    this.wsController = new LogRecordWebSocketController(this.service);
     this.wsRouter = new LogRecordWebSocketRouter(this.wsController);
 
     this.consumers = [new LogRecordConsumer({env, logger, service: this.service})];
