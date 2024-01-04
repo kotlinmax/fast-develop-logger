@@ -25,6 +25,18 @@ exports.up = ({sql}) => {
     CREATE INDEX logs_timestamp_idx     ON "LogRecords"           ("timestamp" )      ;
     CREATE INDEX logs_handler_idx       ON "LogRecords"           ("handler"   )      ;
     CREATE INDEX logs_from_idx          ON "LogRecords"           ("from"      )      ;
+
+    CREATE FUNCTION notify_about_insert_log_record_raw() RETURNS trigger AS
+    $$
+      BEGIN
+        NOTIFY 'log-record', 'New record added';
+        RETURN NEW;
+      END;
+    $$ LANGUAGE plpgsql;
+
+    CREATE TRIGGER trigger_notify_about_new_log_record_raw
+    AFTER INSERT ON "LogRecords" FOR EACH ROW EXECUTE FUNCTION notify_about_insert_log_record_raw();
+
   `);
 };
 
