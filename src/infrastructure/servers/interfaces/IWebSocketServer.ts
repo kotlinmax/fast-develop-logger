@@ -3,7 +3,7 @@ export type TWebSocketUnsubscribe = Promise<() => Promise<void>>;
 export type TWebSocketSubscribeCallback = (channel: string, callback: TWebSocketCallback) => TWebSocketUnsubscribe;
 
 export interface IWebSocketRoutes {
-  [key: string]: Record<'subscribeDatabaseNotification', TWebSocketSubscribeCallback>;
+  [key: string]: Record<'subscribeDatabaseNotification' | string, TWebSocketSubscribeCallback | undefined>;
 }
 
 export interface IWebSocketServer {

@@ -34,16 +34,28 @@ export default class DatabasePostgres implements IDatabaseSQL {
 
   async subscribeDatabaseNotification(channel: string, callback: TWebSocketCallback): TWebSocketUnsubscribe {
     const connection = await this.pool.connect();
+    console.log('DatabasePostgres channel', channel);
 
-    connection.on('notification', callback);
-    await connection.query(`LISTEN ${channel}`);
+    await connection.query(`LISTEN log_record;`);
+    const res = await this.pool.query(`SELECT COUNT(*) FROM "LogRecords";`);
+    console.log(res.rows);
+
+    connection.on('notice', (msg) => {
+      console.log('notice');
+      callback(msg);
+    });
+    connection.on('notification', (msg) => {
+      console.log('notification');
+      callback(msg);
+    });
+
+    connection.query(`NOTIFY log_record, 'bartet!'`);
 
     const unsubscribe = async () => {
-      await connection.query(`UNLISTEN ${channel}`);
+      await connection.query(`UNLISTEN log_record;`);
       connection.removeAllListeners('notification');
       connection.release();
     };
-
     return unsubscribe;
   }
 }

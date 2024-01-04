@@ -28,8 +28,14 @@ exports.up = ({sql}) => {
 
     CREATE FUNCTION notify_about_insert_log_record_raw() RETURNS trigger AS
     $$
+      DECLARE payload TEXT;
       BEGIN
-        NOTIFY 'log-record', 'New record added';
+        payload := json_build_object(
+          'id',NEW."id",
+          'timestamp',NEW."timestamp"
+        );
+
+        PERFORM pg_notify('log_record', payload);
         RETURN NEW;
       END;
     $$ LANGUAGE plpgsql;
@@ -42,5 +48,20 @@ exports.up = ({sql}) => {
 
 // revert migrate
 exports.down = ({sql}) => {
-  sql('DROP TABLE IF EXISTS "LogRecords";');
+  sql(`
+    DROP TRIGGER IF EXISTS trigger_notify_about_new_log_record_raw ON "LogRecords";
+    DROP FUNCTION IF EXISTS notify_about_insert_log_record_raw;
+
+    DROP INDEX IF EXISTS logs_from_idx;
+    DROP INDEX IF EXISTS logs_handler_idx;
+    DROP INDEX IF EXISTS logs_timestamp_idx;
+    DROP INDEX IF EXISTS logs_ip_customer_idx;
+    DROP INDEX IF EXISTS logs_level_idx;
+    DROP INDEX IF EXISTS logs_message_idx;
+
+    DROP TABLE IF EXISTS "LogRecords";
+
+    -- Отключите расширение btree_gin, только если оно больше не используется другими таблицами
+    -- DROP EXTENSION IF EXISTS btree_gin;
+  `);
 };

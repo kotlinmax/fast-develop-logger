@@ -10,6 +10,7 @@ import WebSocketServer from './infrastructure/servers/WebSocketServer';
 import LogRecordModule from './modules/LogRecord/LogRecordModule';
 
 const db = new DatabasePostgres({
+  database: env.POSTGRES_DB,
   user: env.POSTGRES_USER,
   host: env.POSTGRES_SERVICE,
   password: env.POSTGRES_PASSWORD,
