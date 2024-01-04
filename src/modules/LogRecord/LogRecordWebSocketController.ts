@@ -6,7 +6,7 @@ export default class LogRecordWebSocketController implements ILogRecordWebSocket
   constructor(private service: ILogRecordService) {}
 
   public get tag() {
-    return 'LogRecordControllerWS';
+    return 'LogRecordWebSocketController';
   }
 
   public async subscribeDatabaseNotification(channel: string, cb: TWebSocketCallback) {
