@@ -38,9 +38,6 @@ export default class WebSocketServer implements IWebSocketServer {
         return;
       }
 
-      const route = new URL(req.url, `http://${req.headers.host}`).pathname;
-      this.logger.debug(req.method);
-
       const handlerMap = this.routes[req.url];
 
       if (!handlerMap) {
@@ -55,7 +52,7 @@ export default class WebSocketServer implements IWebSocketServer {
         const handler = handlerMap[msg.action];
 
         if (!handler) {
-          ws.send('Handler not found');
+          ws.send('Unknown action');
           return;
         }
 
