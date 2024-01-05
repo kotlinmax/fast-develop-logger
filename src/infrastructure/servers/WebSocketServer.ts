@@ -33,61 +33,47 @@ export default class WebSocketServer implements IWebSocketServer {
     });
 
     this.wss.on('connection', async (ws, req) => {
-      this.logger.debug('Some connected to web socket server');
+      this.logger.debug('[wss] some connected to web socket server');
 
-      const domain = req.url;
+      const domain = req.url?.replace('/', '');
 
       if (!domain) {
         ws.close();
         return;
       }
 
-      const handlers = this.routes[domain];
+      const route = this.routes[domain];
 
-      if (!handlers) {
+      if (!route) {
         ws.close();
         return;
       }
 
       ws.on('message', async (message) => {
-        this.logger.debug('Some send message');
+        this.logger.debug('[wss] some send message');
 
         const msg = JSON.parse(message.toString());
-        const action = msg.action;
+        const handler = route.actions[msg.action];
+        const channel = route.channels[msg.channel];
 
-        if (!action) {
-          ws.send('You must send object same {action: someAction}');
+        if (!handler || !channel) {
+          ws.send(`Invalid action or channel`);
           return;
         }
 
-        const handler = handlers[action];
-
-        if (!handler) {
-          ws.send(`Action not found on route: ${domain}`);
-          return;
-        }
-
-        if (action === 'subscribeDatabaseNotification') {
+        if (msg.action === 'subscribeDatabaseNotification') {
           if (this.clientSubscriptions.has(ws)) {
-            ws.send(`Already has subscription of channel (${domain})`);
+            ws.send(`You already has subscription on ${channel}`);
             return;
           }
 
-          const topic = domain.replace('/', '');
-          // this.logger.debug(`TOPIC: ${topic}`);
-          console.log('TOPIC', topic);
-
-          const unsubscribe = await handler(topic, (data) => {
-            // this.logger.debug(data, 'MSG');
-            console.log('data: ', data);
-
+          const unsubscribe = await handler(channel, (data) => {
             ws.send(JSON.stringify(data));
           });
 
           this.clientSubscriptions.set(ws, true);
 
           const removeSubscription = () => {
-            this.logger.warn('removeSubscription');
             unsubscribe();
             this.clientSubscriptions.delete(ws);
           };
@@ -98,11 +84,11 @@ export default class WebSocketServer implements IWebSocketServer {
       });
 
       ws.on('close', () => {
-        this.logger.error(`[WebsocketServer]: closed`);
+        this.logger.info(`[wss]: ws success finished.`);
       });
 
       ws.on('error', (err) => {
-        this.logger.error(`[WebsocketServer]: error: ${err}`);
+        this.logger.error(`[wss]: ws has error: ${err}`);
       });
     });
   }

@@ -26,22 +26,23 @@ exports.up = ({sql}) => {
     CREATE INDEX logs_handler_idx       ON "LogRecords"           ("handler"   )      ;
     CREATE INDEX logs_from_idx          ON "LogRecords"           ("from"      )      ;
 
-    CREATE FUNCTION notify_about_insert_log_record_raw() RETURNS trigger AS
+    CREATE FUNCTION notify_about_insert_log_records_raw() RETURNS trigger AS
     $$
       DECLARE payload TEXT;
       BEGIN
         payload := json_build_object(
-          'id',NEW."id",
-          'timestamp',NEW."timestamp"
+          'id'        ,  NEW."id"         ,
+          'timestamp' ,  NEW."timestamp"
         );
 
-        PERFORM pg_notify('log_record', payload);
+        PERFORM pg_notify('logRecordsInsertChannel', payload);
         RETURN NEW;
       END;
-    $$ LANGUAGE plpgsql;
+    $$
+    LANGUAGE plpgsql;
 
-    CREATE TRIGGER trigger_notify_about_new_log_record_raw
-    AFTER INSERT ON "LogRecords" FOR EACH ROW EXECUTE FUNCTION notify_about_insert_log_record_raw();
+    CREATE TRIGGER trigger_notify_about_new_log_records_raw
+    AFTER INSERT ON "LogRecords" FOR EACH ROW EXECUTE FUNCTION notify_about_insert_log_records_raw();
 
   `);
 };
@@ -49,8 +50,8 @@ exports.up = ({sql}) => {
 // revert migrate
 exports.down = ({sql}) => {
   sql(`
-    DROP TRIGGER IF EXISTS trigger_notify_about_new_log_record_raw ON "LogRecords";
-    DROP FUNCTION IF EXISTS notify_about_insert_log_record_raw;
+    DROP TRIGGER IF EXISTS trigger_notify_about_new_log_records_raw ON "LogRecords";
+    DROP FUNCTION IF EXISTS notify_about_insert_log_records_raw;
 
     DROP INDEX IF EXISTS logs_from_idx;
     DROP INDEX IF EXISTS logs_handler_idx;

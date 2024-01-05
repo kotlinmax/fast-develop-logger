@@ -11,9 +11,14 @@ export default class LogRecordWebSocketRouter implements IWebSocketRouter {
 
   public get routes(): IWebSocketRoutes {
     return {
-      ['/log-record']: {
-        subscribeDatabaseNotification: async (channel: string, cb: TWebSocketCallback) => {
-          return this.controller.subscribeDatabaseNotification(channel, cb);
+      ['log-records']: {
+        channels: {
+          1: 'logRecordsInsertChannel',
+        },
+        actions: {
+          subscribeDatabaseNotification: async (channel: string, cb: TWebSocketCallback) => {
+            return this.controller.subscribeDatabaseNotification(channel, cb);
+          },
         },
       },
     };
