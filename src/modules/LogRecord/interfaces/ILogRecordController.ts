@@ -11,5 +11,5 @@ export interface ILogRecordHttpController {
 }
 export interface ILogRecordWebSocketController {
   tag: string;
-  subscribeDatabaseNotification: TWebSocketSubscribeCallback;
+  listenDatabase: TWebSocketSubscribeCallback;
 }

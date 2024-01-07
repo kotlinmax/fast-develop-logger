@@ -2,7 +2,7 @@ export interface ISQLDatabase {
   escapeLiteral: (str: string) => string;
   query<T>(sql: string, values?: unknown[]): Promise<T[]>;
   transaction(): Promise<IDatabaseTransaction>;
-  subscribeDatabaseNotification(channel: string, callback: (msg: any) => void): Promise<() => Promise<void>>;
+  listen(channel: string, callback: (msg: any) => void): Promise<() => Promise<void>>;
 }
 
 export interface IDatabaseTransaction {

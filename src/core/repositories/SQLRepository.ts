@@ -1,4 +1,5 @@
 import {ISQLDatabase} from '../databases/ISQLDatabase';
+import {TCallback} from '../servers/interfaces/IWebSocketServer';
 import {ISQLRepository} from './ISQLRepository';
 
 interface ISQLRepositoryConstructor {
@@ -13,6 +14,10 @@ export default class SQLRepository implements ISQLRepository {
   constructor({db, table}: ISQLRepositoryConstructor) {
     this.db = db;
     this.table = table;
+  }
+
+  public async listen(channel: string, callback: TCallback) {
+    return this.db.listen(channel, callback);
   }
 
   public async query<T>(sql: string, values: unknown[]): Promise<T[]> {

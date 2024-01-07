@@ -1,4 +1,4 @@
-import {IWebSocketRoutes, TWebSocketCallback} from '../../core/servers/interfaces/IWebSocketServer';
+import {IWebSocketRoutes, TCallback} from '../../core/servers/interfaces/IWebSocketServer';
 import {IWebSocketRouter} from '../ICommon';
 import {ILogRecordWebSocketController} from './interfaces/ILogRecordController';
 
@@ -11,13 +11,13 @@ export default class LogRecordWebSocketRouter implements IWebSocketRouter {
 
   public get routes(): IWebSocketRoutes {
     return {
-      ['log-records']: {
+      ['/log-records']: {
         channels: {
           1: 'logRecordsInsertChannel',
         },
         actions: {
-          subscribeDatabaseNotification: async (channel: string, cb: TWebSocketCallback) => {
-            return this.controller.subscribeDatabaseNotification(channel, cb);
+          listenDatabase: async (channel: string, cb: TCallback) => {
+            return this.controller.listenDatabase(channel, cb);
           },
         },
       },

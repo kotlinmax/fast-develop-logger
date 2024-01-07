@@ -12,13 +12,13 @@ export default class LogRecordHttpRouter implements IHttpRouter {
   public get routes(): IHttpRoute[] {
     return [
       {
-        url: '/log-record',
+        url: '/log-records',
         method: 'GET',
         constraints: {version: '1.0.0'},
         handler: this.controller.getLogRecord.bind(this.controller),
       },
       {
-        url: '/log-record',
+        url: '/log-records',
         method: 'POST',
         constraints: {version: '1.0.0'},
         handler: this.controller.createLogRecord.bind(this.controller),

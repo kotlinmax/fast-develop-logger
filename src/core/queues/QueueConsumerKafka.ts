@@ -1,4 +1,5 @@
 import {type Consumer, type EachMessagePayload, Kafka} from 'kafkajs';
+import {TCallback} from '../servers/interfaces/IWebSocketServer';
 
 export interface IKafkaConfig {
   brokers: string[];
@@ -10,6 +11,7 @@ export interface IKafkaConfig {
 abstract class QueueConsumerKafka {
   private topic: string;
   private consumer: Consumer;
+  private callback?: TCallback;
 
   constructor(config: IKafkaConfig) {
     const {clientId, brokers, groupId, topic} = config;
@@ -22,10 +24,14 @@ abstract class QueueConsumerKafka {
   public async run() {
     await this.consumer.connect();
     await this.consumer.subscribe({topic: this.topic, fromBeginning: true});
-    await this.consumer.run({eachMessage: this.eachMessageHandler.bind(this)});
+    await this.consumer.run({eachMessage: (payload) => this.eachMessageHandler(payload, this.callback)});
   }
 
-  protected abstract eachMessageHandler(payload: EachMessagePayload): Promise<void>;
+  public async setCallback(callback: TCallback) {
+    this.callback = callback;
+  }
+
+  protected abstract eachMessageHandler(payload: EachMessagePayload, callback?: TCallback): Promise<void>;
 }
 
 export default QueueConsumerKafka;

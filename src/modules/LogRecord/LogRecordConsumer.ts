@@ -2,6 +2,7 @@ import {ILogger} from '../../core/loggers/ILogger';
 import {IQueueConsumer, IEachMessagePayload, IQueueConsumerConstructor} from '../ICommon';
 import {ILogRecordEntity} from './interfaces/ILogRecordEntity';
 import {ILogRecordService} from './interfaces/ILogRecordService';
+import {TCallback} from '../../core/servers/interfaces/IWebSocketServer';
 
 import QueueConsumerKafka from '../../core/queues/QueueConsumerKafka';
 import LogRecordEntity from './LogRecordEntity';
@@ -36,7 +37,7 @@ class LogRecordConsumer extends QueueConsumerKafka implements IQueueConsumer {
     return '[LogRecordQueueConsumerKafka]';
   }
 
-  override async eachMessageHandler(payload: IEachMessagePayload): Promise<void> {
+  override async eachMessageHandler(payload: IEachMessagePayload, callback?: TCallback): Promise<void> {
     if (payload.message.value === null) {
       return;
     }
@@ -47,6 +48,10 @@ class LogRecordConsumer extends QueueConsumerKafka implements IQueueConsumer {
       const message: string = payload.message.value.toString();
       const logRecord: ILogRecordEntity = JSON.parse(message);
       const logRecordEntity = new LogRecordEntity(logRecord);
+
+      if (callback) {
+        callback(logRecord);
+      }
 
       this.batch.push(logRecordEntity);
 

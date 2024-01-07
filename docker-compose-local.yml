@@ -1,6 +1,14 @@
 version: '3.9'
 
 services:
+  zookeeper:
+    env_file:
+      - .env.local
+
+  kafka:
+    env_file:
+      - .env.local
+
   postgres:
     env_file:
       - .env.local

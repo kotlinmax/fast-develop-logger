@@ -4,7 +4,7 @@ import {IHttpRoute} from '../core/servers/interfaces/IHttpServer';
 import {ILogger} from '../core/loggers/ILogger';
 import {IProcessEnv} from '../core/env/IEnvironment';
 import {ISQLDatabase} from '../core/databases/ISQLDatabase';
-import {IWebSocketRoutes} from '../core/servers/interfaces/IWebSocketServer';
+import {IWebSocketRoutes, TCallback} from '../core/servers/interfaces/IWebSocketServer';
 
 /**
  * Here are only the general interfaces that are required in the modules
@@ -47,4 +47,5 @@ export interface IQueueConsumer {
   tag: string;
   eachMessageHandler(payload: IEachMessagePayload): Promise<void>;
   run(): Promise<void>;
+  setCallback(callback: TCallback): void;
 }

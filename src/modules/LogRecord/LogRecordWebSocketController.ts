@@ -1,4 +1,4 @@
-import {TWebSocketCallback} from '../../core/servers/interfaces/IWebSocketServer';
+import {TCallback} from '../../core/servers/interfaces/IWebSocketServer';
 import {ILogRecordWebSocketController} from './interfaces/ILogRecordController';
 import {ILogRecordService} from './interfaces/ILogRecordService';
 
@@ -9,7 +9,7 @@ export default class LogRecordWebSocketController implements ILogRecordWebSocket
     return 'LogRecordWebSocketController';
   }
 
-  public async subscribeDatabaseNotification(channel: string, cb: TWebSocketCallback) {
-    return this.service.subscribeDatabaseNotification(channel, cb);
+  public async listenDatabase(channel: string, cb: TCallback) {
+    return this.service.listenDatabase(channel, cb);
   }
 }

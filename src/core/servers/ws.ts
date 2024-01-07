@@ -14,7 +14,7 @@ export default class WebSocketServer implements IWebSocketServer {
 
   private logger: ILoggerFastify;
 
-  private clientSubscriptions: Map<any, boolean> = new Map();
+  private clientQueueListeners: Map<any, boolean> = new Map();
 
   constructor({httpServer, logger}: IWebSocketServerConstructor) {
     this.logger = logger;
@@ -61,21 +61,21 @@ export default class WebSocketServer implements IWebSocketServer {
           return;
         }
 
-        if (msg.action === 'subscribeDatabaseNotification') {
-          if (this.clientSubscriptions.has(ws)) {
-            ws.send(`You already have subscription on ${channel}`);
+        if (msg.action === 'listenQueue') {
+          if (this.clientQueueListeners.has(ws)) {
+            ws.send(`You already listen ${channel}`);
             return;
           }
 
-          const unsubscribe = await handler(channel, (data) => {
+          const unlisten = await handler(channel, (data) => {
             ws.send(JSON.stringify(data));
           });
 
-          this.clientSubscriptions.set(ws, true);
+          this.clientQueueListeners.set(ws, true);
 
           const removeSubscription = () => {
-            unsubscribe();
-            this.clientSubscriptions.delete(ws);
+            unlisten();
+            this.clientQueueListeners.delete(ws);
           };
 
           ws.on('close', removeSubscription);

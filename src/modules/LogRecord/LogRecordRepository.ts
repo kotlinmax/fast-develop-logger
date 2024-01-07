@@ -2,7 +2,7 @@ import SQLRepository from '../../core/repositories/SQLRepository';
 
 import {ISQLDatabase} from '../../core/databases/ISQLDatabase';
 import {IProcessEnv} from '../../core/env/IEnvironment';
-import {TWebSocketCallback} from '../../core/servers/interfaces/IWebSocketServer';
+import {TCallback} from '../../core/servers/interfaces/IWebSocketServer';
 import {ILogRecordEntity} from './interfaces/ILogRecordEntity';
 import {ILogRecordRepository} from './interfaces/ILogRecordRepository';
 
@@ -21,10 +21,6 @@ export default class LogRecordRepository extends SQLRepository implements ILogRe
 
   public get tag() {
     return 'LogRecordRepository';
-  }
-
-  public subscribeDatabaseNotification(channel: string, callback: TWebSocketCallback) {
-    return this.db.subscribeDatabaseNotification(channel, callback);
   }
 
   async createBatch(rows: ILogRecordEntity[]): Promise<{id: string}[]> {

@@ -1,11 +1,20 @@
 version: '3.9'
 
 services:
+  zookeeper:
+    env_file:
+      - .env.production
+
+  kafka:
+    env_file:
+      - .env.production
+
   postgres:
     env_file:
       - .env.production
     volumes:
       - ./pg_data_prod:/var/lib/postgresql/data
+
   app:
     env_file:
       - .env.production

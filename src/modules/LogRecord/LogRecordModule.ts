@@ -24,8 +24,10 @@ export default class LogRecordModule implements IModule {
   consumers: IQueueConsumer[];
 
   constructor({db, env, logger}: IModuleConstructor) {
+    const consumer = new LogRecordConsumer({env, logger, service: this.service});
+
     this.repository = new LogRecordRepository({env, db});
-    this.service = new LogRecordService({env, logger, repository: this.repository});
+    this.service = new LogRecordService({env, logger, consumer, repository: this.repository});
 
     this.httpController = new LogRecordController(this.service);
     this.httpRouter = new LogRecordHttpRouter(this.httpController);
@@ -33,7 +35,7 @@ export default class LogRecordModule implements IModule {
     this.wsController = new LogRecordWebSocketController(this.service);
     this.wsRouter = new LogRecordWebSocketRouter(this.wsController);
 
-    this.consumers = [new LogRecordConsumer({env, logger, service: this.service})];
+    this.consumers = [consumer];
   }
 
   get tag() {
