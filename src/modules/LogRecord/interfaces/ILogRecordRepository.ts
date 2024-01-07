@@ -1,4 +1,4 @@
-import {IRepositorySQL} from '../../../infrastructure/repository/IRepositorySQL';
+import {IRepositorySQL} from '../../../core/repository/IRepositorySQL';
 import {ILogRecordEntity} from './ILogRecordEntity';
 
 export interface ILogRecordRepository extends IRepositorySQL {

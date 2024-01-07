@@ -1,4 +1,4 @@
-import {IWebSocketRoutes, TWebSocketCallback} from '../../infrastructure/servers/interfaces/IWebSocketServer';
+import {IWebSocketRoutes, TWebSocketCallback} from '../../core/servers/interfaces/IWebSocketServer';
 import {IWebSocketRouter} from '../ICommon';
 import {ILogRecordWebSocketController} from './interfaces/ILogRecordController';
 

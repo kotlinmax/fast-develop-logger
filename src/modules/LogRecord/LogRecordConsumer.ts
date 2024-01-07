@@ -1,9 +1,9 @@
-import {ILogger} from '../../infrastructure/loggers/ILogger';
+import {ILogger} from '../../core/loggers/ILogger';
 import {IQueueConsumer, IEachMessagePayload, IQueueConsumerConstructor} from '../ICommon';
 import {ILogRecordEntity} from './interfaces/ILogRecordEntity';
 import {ILogRecordService} from './interfaces/ILogRecordService';
 
-import QueueConsumerKafka from '../../infrastructure/queues/QueueConsumerKafka';
+import QueueConsumerKafka from '../../core/queues/QueueConsumerKafka';
 import LogRecordEntity from './LogRecordEntity';
 
 interface ILogRecordConsumerKafKaConstructor extends IQueueConsumerConstructor {

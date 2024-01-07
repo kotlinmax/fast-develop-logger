@@ -1,10 +1,10 @@
 import {type EachMessagePayload, type KafkaMessage} from 'kafkajs';
 
-import {IHttpRoute} from '../infrastructure/servers/interfaces/IHttpServer';
-import {ILogger} from '../infrastructure/loggers/ILogger';
-import {IProcessEnv} from '../infrastructure/env/IEnvironment';
-import {IDatabaseSQL} from '../infrastructure/databases/IDatabase';
-import {IWebSocketRoutes} from '../infrastructure/servers/interfaces/IWebSocketServer';
+import {IHttpRoute} from '../core/servers/interfaces/IHttpServer';
+import {ILogger} from '../core/loggers/ILogger';
+import {IProcessEnv} from '../core/env/IEnvironment';
+import {IDatabaseSQL} from '../core/databases/IDatabase';
+import {IWebSocketRoutes} from '../core/servers/interfaces/IWebSocketServer';
 
 /**
  * Here are only the general interfaces that are required in the modules

@@ -1,4 +1,4 @@
-import {IHttpRoute} from '../../infrastructure/servers/interfaces/IHttpServer';
+import {IHttpRoute} from '../../core/servers/interfaces/IHttpServer';
 import {IHttpRouter} from '../ICommon';
 import {ILogRecordHttpController} from './interfaces/ILogRecordController';
 

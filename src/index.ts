@@ -1,12 +1,12 @@
-import DatabasePostgres from './infrastructure/databases/DatabasePostgres';
-import Environment from './infrastructure/env/Environment';
+import DatabasePostgres from './core/databases/DatabasePostgres';
+import Environment from './core/env/Environment';
 
 Environment.init();
 const env = Environment.getEnv();
 
-import Logger from './infrastructure/loggers/Logger';
-import HttpServer from './infrastructure/servers/http';
-import WebSocketServer from './infrastructure/servers/ws';
+import Logger from './core/loggers/Logger';
+import HttpServer from './core/servers/http';
+import WebSocketServer from './core/servers/ws';
 import LogRecordModule from './modules/LogRecord/LogRecordModule';
 
 const db = new DatabasePostgres({

@@ -1,4 +1,4 @@
-import {TWebSocketCallback} from '../../infrastructure/servers/interfaces/IWebSocketServer';
+import {TWebSocketCallback} from '../../core/servers/interfaces/IWebSocketServer';
 import {ILogRecordWebSocketController} from './interfaces/ILogRecordController';
 import {ILogRecordService} from './interfaces/ILogRecordService';
 

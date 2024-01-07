@@ -1,4 +1,4 @@
-import {TWebSocketSubscribeCallback} from '../../../infrastructure/servers/interfaces/IWebSocketServer';
+import {TWebSocketSubscribeCallback} from '../../../core/servers/interfaces/IWebSocketServer';
 import {ILogRecordEntity} from './ILogRecordEntity';
 
 export interface ILogRecordService {

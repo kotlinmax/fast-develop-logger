@@ -1,8 +1,8 @@
-import RepositorySQL from '../../infrastructure/repository/RepositorySQL';
+import RepositorySQL from '../../core/repository/RepositorySQL';
 
-import {IDatabaseSQL} from '../../infrastructure/databases/IDatabase';
-import {IProcessEnv} from '../../infrastructure/env/IEnvironment';
-import {TWebSocketCallback} from '../../infrastructure/servers/interfaces/IWebSocketServer';
+import {IDatabaseSQL} from '../../core/databases/IDatabase';
+import {IProcessEnv} from '../../core/env/IEnvironment';
+import {TWebSocketCallback} from '../../core/servers/interfaces/IWebSocketServer';
 import {ILogRecordEntity} from './interfaces/ILogRecordEntity';
 import {ILogRecordRepository} from './interfaces/ILogRecordRepository';
 
@@ -54,7 +54,7 @@ export default class LogRecordRepository extends RepositorySQL implements ILogRe
     const values: string = `VALUES ${arr.join(',')} RETURNING "id"`;
 
     const query: string = `
-      INSERT INTO "LogRecord" (
+      INSERT INTO "LogRecords" (
         "id"          ,
         "timestamp"   ,
         "ipCustomer"  ,

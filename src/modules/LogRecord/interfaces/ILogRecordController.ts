@@ -1,5 +1,5 @@
-import {IHttpRequest, IHttpResponse} from '../../../infrastructure/servers/interfaces/IHttpServer';
-import {TWebSocketSubscribeCallback} from '../../../infrastructure/servers/interfaces/IWebSocketServer';
+import {IHttpRequest, IHttpResponse} from '../../../core/servers/interfaces/IHttpServer';
+import {TWebSocketSubscribeCallback} from '../../../core/servers/interfaces/IWebSocketServer';
 
 type LogRecordFunction<T> = (req: IHttpRequest, res: IHttpResponse) => Promise<T>;
 
