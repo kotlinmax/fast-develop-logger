@@ -1,4 +1,4 @@
-export interface IRepositorySQL {
+export interface ISQLRepository {
   query<T>(sql: string, values: unknown[]): Promise<T[]>;
   getById<T>(id: string, fields?: string[]): Promise<T[]>;
   create<T>({...record}: {[x: string]: unknown}): Promise<T[]>;

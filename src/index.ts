@@ -1,4 +1,4 @@
-import DatabasePostgres from './core/databases/DatabasePostgres';
+import SQLDatabasePostgres from './core/databases/SQLDatabasePostgres';
 import Environment from './core/env/Environment';
 
 Environment.init();
@@ -9,7 +9,7 @@ import HttpServer from './core/servers/http';
 import WebSocketServer from './core/servers/ws';
 import LogRecordModule from './modules/LogRecord/LogRecordModule';
 
-const db = new DatabasePostgres({
+const db = new SQLDatabasePostgres({
   database: env.POSTGRES_DB,
   user: env.POSTGRES_USER,
   host: env.POSTGRES_SERVICE,

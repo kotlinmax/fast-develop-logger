@@ -1,8 +1,8 @@
 import {Pool, PoolConfig} from 'pg';
-import {ITransactionDB, IDatabaseSQL} from './IDatabase';
+import {IDatabaseTransaction, ISQLDatabase} from './ISQLDatabase';
 import {TWebSocketCallback, TWebSocketUnsubscribe} from '../servers/interfaces/IWebSocketServer';
 
-export default class DatabasePostgres implements IDatabaseSQL {
+export default class SQLDatabasePostgres implements ISQLDatabase {
   private pool: Pool;
   public escapeLiteral: (str: string) => string;
 
@@ -16,7 +16,7 @@ export default class DatabasePostgres implements IDatabaseSQL {
     return res.rows;
   }
 
-  async transaction(): Promise<ITransactionDB> {
+  async transaction(): Promise<IDatabaseTransaction> {
     const connection = await this.pool.connect();
 
     const begin = () => connection.query('BEGIN');

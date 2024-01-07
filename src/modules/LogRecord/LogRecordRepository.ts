@@ -1,6 +1,6 @@
-import RepositorySQL from '../../core/repository/RepositorySQL';
+import SQLRepository from '../../core/repositories/SQLRepository';
 
-import {IDatabaseSQL} from '../../core/databases/IDatabase';
+import {ISQLDatabase} from '../../core/databases/ISQLDatabase';
 import {IProcessEnv} from '../../core/env/IEnvironment';
 import {TWebSocketCallback} from '../../core/servers/interfaces/IWebSocketServer';
 import {ILogRecordEntity} from './interfaces/ILogRecordEntity';
@@ -8,10 +8,10 @@ import {ILogRecordRepository} from './interfaces/ILogRecordRepository';
 
 interface ILogRecordRepositoryPostgresConstructor {
   env: IProcessEnv;
-  db: IDatabaseSQL;
+  db: ISQLDatabase;
 }
 
-export default class LogRecordRepository extends RepositorySQL implements ILogRecordRepository {
+export default class LogRecordRepository extends SQLRepository implements ILogRecordRepository {
   private env: IProcessEnv;
 
   constructor({db, env}: ILogRecordRepositoryPostgresConstructor) {

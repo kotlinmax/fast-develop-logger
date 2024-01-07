@@ -3,7 +3,7 @@ import {type EachMessagePayload, type KafkaMessage} from 'kafkajs';
 import {IHttpRoute} from '../core/servers/interfaces/IHttpServer';
 import {ILogger} from '../core/loggers/ILogger';
 import {IProcessEnv} from '../core/env/IEnvironment';
-import {IDatabaseSQL} from '../core/databases/IDatabase';
+import {ISQLDatabase} from '../core/databases/ISQLDatabase';
 import {IWebSocketRoutes} from '../core/servers/interfaces/IWebSocketServer';
 
 /**
@@ -27,7 +27,7 @@ export interface IWebSocketRouter {
 export interface IModuleConstructor {
   logger: ILogger;
   env: IProcessEnv;
-  db: IDatabaseSQL;
+  db: ISQLDatabase;
 }
 
 export interface IModule {

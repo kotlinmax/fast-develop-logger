@@ -1,11 +1,11 @@
-export interface IDatabaseSQL {
+export interface ISQLDatabase {
   escapeLiteral: (str: string) => string;
   query<T>(sql: string, values?: unknown[]): Promise<T[]>;
-  transaction(): Promise<ITransactionDB>;
+  transaction(): Promise<IDatabaseTransaction>;
   subscribeDatabaseNotification(channel: string, callback: (msg: any) => void): Promise<() => Promise<void>>;
 }
 
-export interface ITransactionDB {
+export interface IDatabaseTransaction {
   begin: () => Promise<unknown>;
   commit: () => Promise<unknown>;
   rollback: () => Promise<unknown>;

@@ -1,27 +1,27 @@
-import {IDatabaseSQL} from '../databases/ISQLDatabase';
-import {IRepositorySQL} from './IRepositorySQL';
+import {ISQLDatabase} from '../databases/ISQLDatabase';
+import {ISQLRepository} from './ISQLRepository';
 
-interface IRepositorySQLConstructor {
-  db: IDatabaseSQL;
+interface ISQLRepositoryConstructor {
+  db: ISQLDatabase;
   table: string;
 }
 
-export default class RepositorySQL implements IRepositorySQL {
-  public db: IDatabaseSQL;
+export default class SQLRepository implements ISQLRepository {
+  public db: ISQLDatabase;
   private table: string;
 
-  constructor({db, table}: IRepositorySQLConstructor) {
+  constructor({db, table}: ISQLRepositoryConstructor) {
     this.db = db;
     this.table = table;
   }
 
   public async query<T>(sql: string, values: unknown[]): Promise<T[]> {
-    return this.db.query<T>(sql, values);
+    return this.db.query(sql, values);
   }
 
   public async getById<T>(id: string, fields = ['*']): Promise<T[]> {
     const columns = fields.join(', ');
-    return this.query<T>(`SELECT ${columns} FROM ${this.table} WHERE id = $1;`, [id]);
+    return this.query(`SELECT ${columns} FROM ${this.table} WHERE id = $1;`, [id]);
   }
 
   public async create<T>({...record}): Promise<T[]> {
@@ -59,10 +59,10 @@ export default class RepositorySQL implements IRepositorySQL {
     const sql = `UPDATE ${this.table} SET ${delta} WHERE id = $${++i};`;
 
     data.push(id);
-    return this.query<T>(sql, data);
+    return this.query(sql, data);
   }
 
   public async delete<T>(id: string): Promise<T[]> {
-    return this.query<T>(`DELETE FROM ${this.table} WHERE id = $1;`, [id]);
+    return this.query(`DELETE FROM ${this.table} WHERE id = $1;`, [id]);
   }
 }
