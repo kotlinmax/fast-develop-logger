@@ -30,15 +30,15 @@ export default class LogRecordService implements ILogRecordService {
     return this.repository.subscribeDatabaseNotification(channel, callback);
   }
 
-  getLogRecordById(id: string): Promise<ILogRecordEntity[]> {
+  public getLogRecordById(id: string): Promise<ILogRecordEntity[]> {
     return this.repository.getById(id);
   }
 
-  createLogRecord(row: ILogRecordEntity): Promise<{id: string}> {
+  public createLogRecord(row: ILogRecordEntity): Promise<{id: string}> {
     throw new Error('Method not implemented.');
   }
 
-  createBatchLogRecords(rows: ILogRecordEntity[]): Promise<{id: string}[]> {
+  public createBatchLogRecords(rows: ILogRecordEntity[]): Promise<{id: string}[]> {
     return this.repository.createBatch(rows);
   }
 }

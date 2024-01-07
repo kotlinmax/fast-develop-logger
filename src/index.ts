@@ -5,8 +5,8 @@ Environment.init();
 const env = Environment.getEnv();
 
 import Logger from './infrastructure/loggers/Logger';
-import HttpServer from './infrastructure/servers/HttpServer';
-import WebSocketServer from './infrastructure/servers/WebSocketServer';
+import HttpServer from './infrastructure/servers/http';
+import WebSocketServer from './infrastructure/servers/ws';
 import LogRecordModule from './modules/LogRecord/LogRecordModule';
 
 const db = new DatabasePostgres({

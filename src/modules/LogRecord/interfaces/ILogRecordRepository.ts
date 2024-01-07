@@ -1,8 +1,8 @@
+import {IRepositorySQL} from '../../../infrastructure/repository/IRepositorySQL';
 import {ILogRecordEntity} from './ILogRecordEntity';
 
-export interface ILogRecordRepository {
+export interface ILogRecordRepository extends IRepositorySQL {
   tag: string;
-  getById(id: string): Promise<ILogRecordEntity[]>;
   createBatch(logRecords: ILogRecordEntity[]): Promise<{id: string}[]>;
   subscribeDatabaseNotification(channel: string, callback: (msg: any) => void): Promise<() => Promise<void>>;
 }

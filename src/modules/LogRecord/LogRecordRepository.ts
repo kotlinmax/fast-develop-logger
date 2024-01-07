@@ -1,3 +1,5 @@
+import RepositorySQL from '../../infrastructure/repository/RepositorySQL';
+
 import {IDatabaseSQL} from '../../infrastructure/databases/IDatabase';
 import {IProcessEnv} from '../../infrastructure/env/IEnvironment';
 import {TWebSocketCallback} from '../../infrastructure/servers/interfaces/IWebSocketServer';
@@ -9,13 +11,12 @@ interface ILogRecordRepositoryPostgresConstructor {
   db: IDatabaseSQL;
 }
 
-export default class LogRecordRepository implements ILogRecordRepository {
+export default class LogRecordRepository extends RepositorySQL implements ILogRecordRepository {
   private env: IProcessEnv;
-  private db: IDatabaseSQL;
 
   constructor({db, env}: ILogRecordRepositoryPostgresConstructor) {
+    super({table: 'LogRecords', db});
     this.env = env;
-    this.db = db;
   }
 
   public get tag() {
@@ -24,12 +25,6 @@ export default class LogRecordRepository implements ILogRecordRepository {
 
   public subscribeDatabaseNotification(channel: string, callback: TWebSocketCallback) {
     return this.db.subscribeDatabaseNotification(channel, callback);
-  }
-
-  async getById(id: string): Promise<ILogRecordEntity[]> {
-    const query = `SELECT * FROM "LogRecords" WHERE "id" = $1;`;
-    const items = await this.db.query<ILogRecordEntity>(query, [id]);
-    return items;
   }
 
   async createBatch(rows: ILogRecordEntity[]): Promise<{id: string}[]> {

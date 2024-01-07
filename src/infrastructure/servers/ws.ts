@@ -63,7 +63,7 @@ export default class WebSocketServer implements IWebSocketServer {
 
         if (msg.action === 'subscribeDatabaseNotification') {
           if (this.clientSubscriptions.has(ws)) {
-            ws.send(`You already has subscription on ${channel}`);
+            ws.send(`You already have subscription on ${channel}`);
             return;
           }
 
