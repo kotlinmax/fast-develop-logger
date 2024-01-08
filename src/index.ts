@@ -7,7 +7,7 @@ const env = Environment.getEnv();
 import Logger from './core/loggers/Logger';
 import HttpServer from './core/servers/http';
 import WebSocketServer from './core/servers/ws';
-import LogRecordModule from './modules/LogRecord/LogRecordModule';
+import LogRecordModule from './modules/LogRecord';
 
 const db = new SQLDatabasePostgres({
   database: env.POSTGRES_DB,
