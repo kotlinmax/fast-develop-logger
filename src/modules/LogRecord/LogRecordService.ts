@@ -34,19 +34,19 @@ export default class LogRecordService implements ILogRecordService {
     return this.repository.listen(channel, callback);
   }
 
-  public listenQueue(callback: TCallback) {
-    return this.consumer.setCallback(callback);
+  public async listenQueue(callback: TCallback) {
+    this.consumer.setCallback(callback);
   }
 
-  public getLogRecordById(id: string): Promise<ILogRecordEntity[]> {
+  public async getLogRecordById(id: string): Promise<ILogRecordEntity[]> {
     return this.repository.getById(id);
   }
 
-  public createLogRecord(row: ILogRecordEntity): Promise<{id: string}> {
+  public async createLogRecord(row: ILogRecordEntity): Promise<{id: string}> {
     throw new Error('Method not implemented.');
   }
 
-  public createBatchLogRecords(rows: ILogRecordEntity[]): Promise<{id: string}[]> {
+  public async createBatchLogRecords(rows: ILogRecordEntity[]): Promise<{id: string}[]> {
     return this.repository.createBatch(rows);
   }
 }

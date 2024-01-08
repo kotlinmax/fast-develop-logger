@@ -5,7 +5,7 @@ export type TWebSocketSubscribeCallback = (channel: string, callback: TCallback)
 export interface IWebSocketRoutes {
   [key: string]: {
     channels: Record<string, string>;
-    actions: Record<string, TWebSocketSubscribeCallback | undefined>;
+    actions: Record<string, Function | undefined>;
   };
 }
 

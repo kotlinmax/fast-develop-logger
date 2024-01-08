@@ -12,4 +12,8 @@ export default class LogRecordWebSocketController implements ILogRecordWebSocket
   public async listenDatabase(channel: string, cb: TCallback) {
     return this.service.listenDatabase(channel, cb);
   }
+
+  public async listenQueue(cb: TCallback) {
+    return this.service.listenQueue(cb);
+  }
 }

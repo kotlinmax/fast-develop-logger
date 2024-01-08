@@ -67,7 +67,7 @@ export default class WebSocketServer implements IWebSocketServer {
             return;
           }
 
-          const unlisten = await handler(channel, (data) => {
+          const unlisten = await handler(channel, (data: unknown) => {
             ws.send(JSON.stringify(data));
           });
 

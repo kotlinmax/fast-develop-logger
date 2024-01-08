@@ -1,5 +1,5 @@
 import {IHttpRequest, IHttpResponse} from '../../../core/servers/interfaces/IHttpServer';
-import {TWebSocketSubscribeCallback} from '../../../core/servers/interfaces/IWebSocketServer';
+import {TCallback, TWebSocketSubscribeCallback} from '../../../core/servers/interfaces/IWebSocketServer';
 
 type LogRecordFunction<T> = (req: IHttpRequest, res: IHttpResponse) => Promise<T>;
 
@@ -12,4 +12,5 @@ export interface ILogRecordHttpController {
 export interface ILogRecordWebSocketController {
   tag: string;
   listenDatabase: TWebSocketSubscribeCallback;
+  listenQueue: (callback: TCallback) => Promise<void>;
 }
