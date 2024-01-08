@@ -1,8 +1,8 @@
 // src/controllers/LogRecordController.ts
 
-import {IHttpRequest, IHttpResponse} from '../../core/servers/interfaces/IHttpServer';
-import {ILogRecordHttpController} from './interfaces/ILogRecordController';
-import {ILogRecordService} from './interfaces/ILogRecordService';
+import {IHttpRequest, IHttpResponse} from '../../../core/servers/interfaces/IHttpServer';
+import {ILogRecordHttpController} from '../interfaces/ILogRecordController';
+import {ILogRecordService} from '../interfaces/ILogRecordService';
 
 export default class LogRecordHttpController implements ILogRecordHttpController {
   constructor(private logRecordService: ILogRecordService) {}

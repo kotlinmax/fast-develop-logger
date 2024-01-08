@@ -1,10 +1,10 @@
-import {ILogger} from '../../core/loggers/ILogger';
-import {IQueueConsumer, IEachMessagePayload, IQueueConsumerConstructor} from '../ICommon';
-import {ILogRecordEntity} from './interfaces/ILogRecordEntity';
-import {ILogRecordService} from './interfaces/ILogRecordService';
-import {TCallback} from '../../core/servers/interfaces/IWebSocketServer';
+import {ILogger} from '../../../core/loggers/ILogger';
+import {IQueueConsumer, IEachMessagePayload, IQueueConsumerConstructor} from '../../ICommon';
+import {ILogRecordEntity} from '../interfaces/ILogRecordEntity';
+import {ILogRecordService} from '../interfaces/ILogRecordService';
+import {TCallback} from '../../../core/servers/interfaces/IWebSocketServer';
 
-import QueueConsumerKafka from '../../core/queues/QueueConsumerKafka';
+import QueueConsumerKafka from '../../../core/queues/QueueConsumerKafka';
 import LogRecordEntity from './LogRecordEntity';
 
 interface ILogRecordConsumerKafKaConstructor extends IQueueConsumerConstructor {

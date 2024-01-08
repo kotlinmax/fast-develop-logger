@@ -3,13 +3,13 @@ import {ILogRecordHttpController, ILogRecordWebSocketController} from './interfa
 import {ILogRecordRepository} from './interfaces/ILogRecordRepository';
 import {ILogRecordService} from './interfaces/ILogRecordService';
 
-import LogRecordController from './LogRecordHttpController';
-import LogRecordRepository from './LogRecordRepository';
-import LogRecordHttpRouter from './LogRecordHttpRouter';
-import LogRecordService from './LogRecordService';
-import LogRecordConsumer from './LogRecordConsumer';
-import LogRecordWebSocketController from './LogRecordWebSocketController';
-import LogRecordWebSocketRouter from './LogRecordWebSocketRouter';
+import LogRecordController from './impl/LogRecordHttpController';
+import LogRecordRepository from './impl/LogRecordRepository';
+import LogRecordHttpRouter from './impl/LogRecordHttpRouter';
+import LogRecordService from './impl/LogRecordService';
+import LogRecordConsumer from './impl/LogRecordConsumer';
+import LogRecordWebSocketController from './impl/LogRecordWebSocketController';
+import LogRecordWebSocketRouter from './impl/LogRecordWebSocketRouter';
 
 export default class LogRecordModule implements IModule {
   repository: ILogRecordRepository;

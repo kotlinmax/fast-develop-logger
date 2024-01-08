@@ -1,6 +1,6 @@
-import {IWebSocketRoutes, TCallback} from '../../core/servers/interfaces/IWebSocketServer';
-import {IWebSocketRouter} from '../ICommon';
-import {ILogRecordWebSocketController} from './interfaces/ILogRecordController';
+import {IWebSocketRoutes, TCallback} from '../../../core/servers/interfaces/IWebSocketServer';
+import {IWebSocketRouter} from '../../ICommon';
+import {ILogRecordWebSocketController} from '../interfaces/ILogRecordController';
 
 export default class LogRecordWebSocketRouter implements IWebSocketRouter {
   constructor(private controller: ILogRecordWebSocketController) {}

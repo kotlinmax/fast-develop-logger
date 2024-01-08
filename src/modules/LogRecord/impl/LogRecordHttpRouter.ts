@@ -1,6 +1,6 @@
-import {IHttpRoute} from '../../core/servers/interfaces/IHttpServer';
-import {IHttpRouter} from '../ICommon';
-import {ILogRecordHttpController} from './interfaces/ILogRecordController';
+import {IHttpRoute} from '../../../core/servers/interfaces/IHttpServer';
+import {IHttpRouter} from '../../ICommon';
+import {ILogRecordHttpController} from '../interfaces/ILogRecordController';
 
 export default class LogRecordHttpRouter implements IHttpRouter {
   constructor(private controller: ILogRecordHttpController) {}

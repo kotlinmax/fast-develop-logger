@@ -1,4 +1,4 @@
-import {ILogRecordEntity} from './interfaces/ILogRecordEntity';
+import {ILogRecordEntity} from '../interfaces/ILogRecordEntity';
 
 export default class LogRecordEntity implements ILogRecordEntity {
   id: string;

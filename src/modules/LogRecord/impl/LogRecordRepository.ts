@@ -1,10 +1,10 @@
-import SQLRepository from '../../core/repositories/SQLRepository';
+import SQLRepository from '../../../core/repositories/SQLRepository';
 
-import {ISQLDatabase} from '../../core/databases/ISQLDatabase';
-import {IProcessEnv} from '../../core/env/IEnvironment';
-import {TCallback} from '../../core/servers/interfaces/IWebSocketServer';
-import {ILogRecordEntity} from './interfaces/ILogRecordEntity';
-import {ILogRecordRepository} from './interfaces/ILogRecordRepository';
+import {ISQLDatabase} from '../../../core/databases/ISQLDatabase';
+import {IProcessEnv} from '../../../core/env/IEnvironment';
+import {TCallback} from '../../../core/servers/interfaces/IWebSocketServer';
+import {ILogRecordEntity} from '../interfaces/ILogRecordEntity';
+import {ILogRecordRepository} from '../interfaces/ILogRecordRepository';
 
 interface ILogRecordRepositoryPostgresConstructor {
   env: IProcessEnv;
