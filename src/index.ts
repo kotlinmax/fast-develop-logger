@@ -1,15 +1,15 @@
-import SQLDatabasePostgres from './core/databases/SQLDatabasePostgres';
-import Environment from './core/env/Environment';
+import DatabaseSQL from './infra/db/DatabaseSQL';
+import Environment from './infra/env/Environment';
 
 Environment.init();
 const env = Environment.getEnv();
 
-import Logger from './core/loggers/Logger';
-import HttpServer from './core/servers/http';
-import WebSocketServer from './core/servers/ws';
+import Logger from './infra/log/Logger';
+import HttpServer from './infra/servers/impl/httpServer';
+import WsServer from './infra/servers/impl/wsServer';
 import LogRecordModule from './modules/LogRecord';
 
-const db = new SQLDatabasePostgres({
+const db = new DatabaseSQL({
   database: env.POSTGRES_DB,
   user: env.POSTGRES_USER,
   host: env.POSTGRES_SERVICE,
@@ -21,7 +21,7 @@ const db = new SQLDatabasePostgres({
 const logger = new Logger();
 
 const httpServer = new HttpServer(logger);
-const wsServer = new WebSocketServer({logger, httpServer});
+const wsServer = new WsServer({logger, httpServer});
 
 // Create modules
 const logRecordModule = new LogRecordModule({db, env, logger});

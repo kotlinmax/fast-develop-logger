@@ -11,6 +11,6 @@
     "paths": {},
     "strictPropertyInitialization": false
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/bases"],
   "exclude": ["node_modules", "dist", "prisma"]
 }

@@ -1,33 +1,32 @@
-import {TCallback} from '../../../core/servers/interfaces/IWebSocketServer';
-import {IProcessEnv} from '../../../core/env/IEnvironment';
-import {ILogger} from '../../../core/loggers/ILogger';
-import {ILogRecordEntity} from '../interfaces/ILogRecordEntity';
-import {ILogRecordRepository} from '../interfaces/ILogRecordRepository';
-import {ILogRecordService} from '../interfaces/ILogRecordService';
-import {IQueueConsumer} from '../../ICommon';
+import BaseService from '../../../bases/impl/BaseService';
+
+import {TCallback} from '../../../infra/servers/cnrt/IWsServer';
+import {IProcessEnv} from '../../../infra/env/IEnvironment';
+import {ILogger} from '../../../infra/log/ILogger';
+import {IBaseQueueConsumer} from '../../../bases/cntr/IBaseQueueConsumer';
+
+import {ILogRecordEntity} from '../cntr/ILogRecordEntity';
+import {ILogRecordService} from '../cntr/ILogRecordService';
+import {ILogRecordSqlRepository} from '../cntr/ILogRecordSqlRepository';
 
 interface LogRecordServiceConstructor {
   env: IProcessEnv;
   logger: ILogger;
-  repository: ILogRecordRepository;
-  consumer: IQueueConsumer;
+  repository: ILogRecordSqlRepository;
 }
 
-export default class LogRecordService implements ILogRecordService {
-  private env: IProcessEnv;
-  private repository: ILogRecordRepository;
-  private logger: ILogger;
-  private consumer: IQueueConsumer;
+export default class LogRecordService extends BaseService implements ILogRecordService {
+  readonly tag: string = 'LogRecordService';
 
-  constructor({env, logger, repository, consumer}: LogRecordServiceConstructor) {
+  private repository: ILogRecordSqlRepository;
+  private env: IProcessEnv;
+  private logger: ILogger;
+
+  constructor({env, logger, repository}: LogRecordServiceConstructor) {
+    super();
     this.env = env;
     this.logger = logger;
     this.repository = repository;
-    this.consumer = consumer;
-  }
-
-  public get tag() {
-    return 'LogRecordService';
   }
 
   public listenDatabase(channel: string, callback: TCallback) {
@@ -35,7 +34,7 @@ export default class LogRecordService implements ILogRecordService {
   }
 
   public async listenQueue(callback: TCallback) {
-    this.consumer.setCallback(callback);
+    // this.consumer.setCallback(callback);
   }
 
   public async getLogRecordById(id: string): Promise<ILogRecordEntity[]> {

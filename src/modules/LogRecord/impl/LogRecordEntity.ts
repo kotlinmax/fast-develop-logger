@@ -1,6 +1,9 @@
-import {ILogRecordEntity} from '../interfaces/ILogRecordEntity';
+import BaseEntity from '../../../bases/impl/BaseEntity';
+import {ILogRecordEntity} from '../cntr/ILogRecordEntity';
 
-export default class LogRecordEntity implements ILogRecordEntity {
+export default class LogRecordEntity extends BaseEntity implements ILogRecordEntity {
+  readonly tag: string = 'LogRecordEntity';
+
   id: string;
   ipCustomer: string;
   timestamp: Date;
@@ -12,6 +15,7 @@ export default class LogRecordEntity implements ILogRecordEntity {
   from: string;
 
   constructor(params: ILogRecordEntity) {
+    super();
     this.id = params.id;
     this.ipCustomer = params.ipCustomer;
     this.timestamp = params.timestamp;

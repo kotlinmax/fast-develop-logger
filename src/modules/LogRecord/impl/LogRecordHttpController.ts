@@ -1,14 +1,14 @@
-// src/controllers/LogRecordController.ts
+import BaseHttpController from '../../../bases/impl/BaseHttpController';
 
-import {IHttpRequest, IHttpResponse} from '../../../core/servers/interfaces/IHttpServer';
-import {ILogRecordHttpController} from '../interfaces/ILogRecordController';
-import {ILogRecordService} from '../interfaces/ILogRecordService';
+import {IHttpRequest, IHttpResponse} from '../../../infra/servers/cnrt/IHttpServer';
+import {ILogRecordHttpController} from '../cntr/ILogRecordHttpController';
+import {ILogRecordService} from '../cntr/ILogRecordService';
 
-export default class LogRecordHttpController implements ILogRecordHttpController {
-  constructor(private logRecordService: ILogRecordService) {}
+export default class LogRecordHttpController extends BaseHttpController implements ILogRecordHttpController {
+  readonly tag: string = 'LogRecordHttpController';
 
-  public get tag() {
-    return 'LogRecordController';
+  constructor(private logRecordService: ILogRecordService) {
+    super();
   }
 
   public async getLogRecord(req: IHttpRequest, res: IHttpResponse): Promise<void> {
@@ -18,5 +18,6 @@ export default class LogRecordHttpController implements ILogRecordHttpController
   public async createLogRecord(req: IHttpRequest, res: IHttpResponse): Promise<void> {
     res.code(200).header('Content-Type', 'application/json; charset=utf-8').send({status: 'ok'});
   }
+
   public async handleWebSocketMessage(): Promise<void> {}
 }
