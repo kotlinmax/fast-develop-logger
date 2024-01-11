@@ -2,12 +2,12 @@ import BaseWsController from '../../../bases/impl/BaseWsController';
 
 import {TCallback} from '../../../infra/servers/cnrt/IWsServer';
 import {ILogRecordWsController} from '../cntr/ILogRecordWsController';
-import {ILogRecordService} from '../cntr/ILogRecordService';
+import {ILogRecordHttpService} from '../cntr/ILogRecordHttpService';
 
 export default class LogRecordWsController extends BaseWsController implements ILogRecordWsController {
   readonly tag: string = 'LogRecordWsController';
 
-  constructor(private service: ILogRecordService) {
+  constructor(private service: ILogRecordHttpService) {
     super();
   }
 

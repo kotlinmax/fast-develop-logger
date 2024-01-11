@@ -1,4 +1,4 @@
-import BaseService from '../../../bases/impl/BaseService';
+import BaseHttpService from '../../../bases/impl/BaseHttpService';
 
 import {TCallback} from '../../../infra/servers/cnrt/IWsServer';
 import {IProcessEnv} from '../../../infra/env/IEnvironment';
@@ -6,23 +6,23 @@ import {ILogger} from '../../../infra/log/ILogger';
 import {IBaseQueueConsumer} from '../../../bases/cntr/IBaseQueueConsumer';
 
 import {ILogRecordEntity} from '../cntr/ILogRecordEntity';
-import {ILogRecordService} from '../cntr/ILogRecordService';
+import {ILogRecordHttpService} from '../cntr/ILogRecordHttpService';
 import {ILogRecordSqlRepository} from '../cntr/ILogRecordSqlRepository';
 
-interface LogRecordServiceConstructor {
+interface LogRecordHttpServiceConstructor {
   env: IProcessEnv;
   logger: ILogger;
   repository: ILogRecordSqlRepository;
 }
 
-export default class LogRecordService extends BaseService implements ILogRecordService {
-  readonly tag: string = 'LogRecordService';
+export default class LogRecordHttpService extends BaseHttpService implements ILogRecordHttpService {
+  readonly tag: string = 'LogRecordHttpService';
 
   private repository: ILogRecordSqlRepository;
   private env: IProcessEnv;
   private logger: ILogger;
 
-  constructor({env, logger, repository}: LogRecordServiceConstructor) {
+  constructor({env, logger, repository}: LogRecordHttpServiceConstructor) {
     super();
     this.env = env;
     this.logger = logger;

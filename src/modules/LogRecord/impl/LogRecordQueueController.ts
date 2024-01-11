@@ -1,13 +1,13 @@
-import BaseHttpController from '../../../bases/impl/BaseHttpController';
+import BaseQueueController from '../../../bases/impl/BaseQueueController';
 
 import {IHttpRequest, IHttpResponse} from '../../../infra/servers/cnrt/IHttpServer';
-import {ILogRecordHttpController} from '../cntr/ILogRecordHttpController';
-import {ILogRecordHttpService} from '../cntr/ILogRecordHttpService';
+import {ILogRecordQueueController} from '../cntr/ILogRecordQueueController';
+import {ILogRecordQueueService} from '../cntr/ILogRecordQueueService';
 
-export default class LogRecordHttpController extends BaseHttpController implements ILogRecordHttpController {
-  readonly tag: string = 'LogRecordHttpController';
+export default class LogRecordQueueController extends BaseQueueController implements ILogRecordQueueController {
+  readonly tag: string = 'LogRecordQueueController';
 
-  constructor(private logRecordService: ILogRecordHttpService) {
+  constructor(private service: ILogRecordQueueService) {
     super();
   }
 

@@ -4,20 +4,20 @@ import BaseQueueConsumer from '../../../bases/impl/BaseQueueConsumer';
 import {ILogger} from '../../../infra/log/ILogger';
 import {IEachMessagePayload} from '../../ICommon';
 import {ILogRecordEntity} from '../cntr/ILogRecordEntity';
-import {ILogRecordService} from '../cntr/ILogRecordService';
+import {ILogRecordHttpService} from '../cntr/ILogRecordHttpService';
 import {TCallback} from '../../../infra/servers/cnrt/IWsServer';
 import {ILogRecordQueueConsumer} from '../cntr/ILogRecordQueueConsumer';
 import {IBaseQueueConsumerConstructor} from '../../../bases/cntr/IBaseQueueConsumer';
 
 interface IConstructor extends IBaseQueueConsumerConstructor {
-  service: ILogRecordService;
+  service: ILogRecordHttpService;
 }
 
 export default class LogRecordQueueConsumer extends BaseQueueConsumer implements ILogRecordQueueConsumer {
   readonly tag: string = 'LogRecordQueueConsumer';
 
   private logger: ILogger;
-  private service: ILogRecordService;
+  private service: ILogRecordHttpService;
 
   private batch: ILogRecordEntity[] = [];
   private batchSize = 100;

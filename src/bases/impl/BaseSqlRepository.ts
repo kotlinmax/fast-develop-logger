@@ -2,10 +2,6 @@ import {IDatabaseSQL} from '../../infra/db/IDatabaseSQL';
 import {TCallback} from '../../infra/servers/cnrt/IWsServer';
 import {IBaseSqlRepository} from '../cntr/IBaseSqlRepository';
 
-interface ISQLRepositoryConstructor {
-  db: IDatabaseSQL;
-}
-
 export default abstract class BaseSqlRepository implements IBaseSqlRepository {
   abstract readonly tag: string;
   abstract readonly table: string;
@@ -46,6 +42,7 @@ export default abstract class BaseSqlRepository implements IBaseSqlRepository {
 
   public async update<T>(id: string, {...record}): Promise<T[]> {
     const keys = Object.keys(record);
+
     const updates = new Array(keys.length);
     const data = new Array(keys.length);
 

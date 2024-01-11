@@ -7,11 +7,11 @@ import {IBaseQueueConsumer} from '../../bases/cntr/IBaseQueueConsumer';
 import BaseModule from '../../bases/impl/BaseModule';
 
 import LogRecordWsRouter from './impl/LogRecordWsRouter';
-import LogRecordController from './impl/LogRecordHttpController';
-import LogRecordSqlRepository from './impl/LogRecordSqlRepository';
-import LogRecordHttpRouter from './impl/LogRecordHttpRouter';
-import LogRecordService from './impl/LogRecordService';
 import LogRecordWsController from './impl/LogRecordWsController';
+import LogRecordHttpRouter from './impl/LogRecordHttpRouter';
+import LogRecordHttpController from './impl/LogRecordHttpController';
+import LogRecordSqlRepository from './impl/LogRecordSqlRepository';
+import LogRecordHttpService from './impl/LogRecordHttpService';
 import LogRecordQueueConsumer from './impl/LogRecordQueueConsumer';
 
 export default class LogRecordModule extends BaseModule implements ILogRecordModule {
@@ -24,11 +24,14 @@ export default class LogRecordModule extends BaseModule implements ILogRecordMod
   constructor({db, env, logger}: IModuleConstructor) {
     super();
     const repository = new LogRecordSqlRepository({env, db});
-    const service = new LogRecordService({env, logger, repository});
+    const service = new LogRecordHttpService({env, logger, repository});
 
     const consumer = new LogRecordQueueConsumer({env, logger, service});
+    // TODO consumerService
+    // TODO httpService
+    // TODO wsService
 
-    const httpController = new LogRecordController(service);
+    const httpController = new LogRecordHttpController(service);
     const wsController = new LogRecordWsController(service);
 
     this.httpRouter = new LogRecordHttpRouter(httpController);
