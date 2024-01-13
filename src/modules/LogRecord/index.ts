@@ -1,18 +1,24 @@
 import {IModuleConstructor} from '../ICommon';
-import {ILogRecordModule} from './cntr/ILogRecordModule';
-import {ILogRecordWsRouter} from './cntr/ILogRecordWsRouter';
-import {ILogRecordHttpRouter} from './cntr/ILogRecordHttpRouter';
+import {ILogRecordWsRouter} from './cntr/routes/ILogRecordWsRouter';
+import {ILogRecordHttpRouter} from './cntr/routes/ILogRecordHttpRouter';
 import {IBaseQueueConsumer} from '../../bases/cntr/IBaseQueueConsumer';
+import {ILogRecordHttpService} from './cntr/services/ILogRecordHttpService';
+import {ILogRecordQueueService} from './cntr/services/ILogRecordQueueService';
+import {ILogRecordWsService} from './cntr/services/ILogRecordWsService';
 
-import BaseModule from '../../bases/impl/BaseModule';
-
-import LogRecordWsRouter from './impl/LogRecordWsRouter';
-import LogRecordWsController from './impl/LogRecordWsController';
-import LogRecordHttpRouter from './impl/LogRecordHttpRouter';
-import LogRecordHttpController from './impl/LogRecordHttpController';
+import BaseModule from '../../bases';
+import LogRecordWsRouter from './impl/routes/LogRecordWsRouter';
+import LogRecordWsController from './impl/controllers/LogRecordWsController';
+import LogRecordHttpRouter from './impl/routes/LogRecordHttpRouter';
+import LogRecordHttpController from './impl/controllers/LogRecordHttpController';
 import LogRecordSqlRepository from './impl/LogRecordSqlRepository';
-import LogRecordHttpService from './impl/LogRecordHttpService';
+import LogRecordHttpService from './impl/services/LogRecordHttpService';
 import LogRecordQueueConsumer from './impl/LogRecordQueueConsumer';
+import LogRecordQueueService from './impl/services/LogRecordQueueService';
+import LogRecordWsService from './impl/services/LogRecordWsService';
+import LogRecordQueueController from './impl/controllers/LogRecordQueueController';
+
+export interface ILogRecordModule extends BaseModule {}
 
 export default class LogRecordModule extends BaseModule implements ILogRecordModule {
   readonly tag: string = 'LogRecordModule';
@@ -21,18 +27,26 @@ export default class LogRecordModule extends BaseModule implements ILogRecordMod
   readonly wsRouter: ILogRecordWsRouter;
   readonly consumers: IBaseQueueConsumer[];
 
-  constructor({db, env, logger}: IModuleConstructor) {
+  constructor(infra: IModuleConstructor) {
     super();
-    const repository = new LogRecordSqlRepository({env, db});
-    const service = new LogRecordHttpService({env, logger, repository});
 
-    const consumer = new LogRecordQueueConsumer({env, logger, service});
-    // TODO consumerService
-    // TODO httpService
-    // TODO wsService
+    // ONE REPO FOR ALL SERVICE
+    const repository = new LogRecordSqlRepository(infra);
 
-    const httpController = new LogRecordHttpController(service);
-    const wsController = new LogRecordWsController(service);
+    // SERVICES
+    const infraService = {...infra, repository};
+    const queueService: ILogRecordQueueService = new LogRecordQueueService(infraService);
+    const httpService: ILogRecordHttpService = new LogRecordHttpService(infraService);
+    const wsService: ILogRecordWsService = new LogRecordWsService(infraService);
+
+    // CONTROLLERS
+    const queueController = new LogRecordQueueController(queueService);
+    const httpController = new LogRecordHttpController(httpService);
+    const wsController = new LogRecordWsController(wsService);
+
+    // TODO consumer same ws (actions or type message)
+    const infraConsumer = {...infra, service: queueService};
+    const consumer = new LogRecordQueueConsumer(infraConsumer);
 
     this.httpRouter = new LogRecordHttpRouter(httpController);
     this.wsRouter = new LogRecordWsRouter(wsController);

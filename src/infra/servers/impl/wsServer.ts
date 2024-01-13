@@ -1,6 +1,6 @@
 import {AddressInfo, WebSocketServer as WSS} from 'ws';
 import {IWsRoutes, IWsServer} from '../cnrt/IWsServer';
-import {ILoggerFastify} from '../../log/ILogger';
+import {ILoggerFastify} from '../../logger/ILogger';
 import {IHttpServer} from '../cnrt/IHttpServer';
 
 interface IWsServerConstructor {

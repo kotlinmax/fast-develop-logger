@@ -1,7 +1,7 @@
 import Environment from '../../env/Environment';
 import fastify, {FastifyInstance} from 'fastify';
 import {IHttpServer, IHttpRoute} from '../cnrt/IHttpServer';
-import {ILoggerFastify} from '../../log/ILogger';
+import {ILoggerFastify} from '../../logger/ILogger';
 
 const env = Environment.getEnv();
 

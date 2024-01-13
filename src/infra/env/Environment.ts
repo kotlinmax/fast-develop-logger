@@ -1,9 +1,9 @@
-import {IExtraProcessEnv, IProcessEnv} from './IEnvironment';
+import {IExtraProcessEnv, IEnv} from './IEnvironment';
 import {config as envConfig} from 'dotenv';
 
 export default class Environment {
-  static getEnv(): IProcessEnv {
-    return process.env as IProcessEnv;
+  static getEnv(): IEnv {
+    return process.env as IEnv;
   }
 
   static init() {

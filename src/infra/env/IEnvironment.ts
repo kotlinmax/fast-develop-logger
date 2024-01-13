@@ -1,4 +1,4 @@
-// src/interfaces/IProcessEnv.ts
+// src/interfaces/IEnv.ts
 
 export type IDefaultProcessEnv = typeof process.env;
 
@@ -17,4 +17,4 @@ export type IExtraProcessEnv = {
   LOG_RECORD_BATCH_SIZE: string;
 };
 
-export type IProcessEnv = IDefaultProcessEnv & IExtraProcessEnv;
+export type IEnv = IDefaultProcessEnv & IExtraProcessEnv;

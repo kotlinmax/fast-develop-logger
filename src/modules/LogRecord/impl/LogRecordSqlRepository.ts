@@ -1,12 +1,12 @@
 import BaseSqlRepository from '../../../bases/impl/BaseSqlRepository';
 
 import {IDatabaseSQL} from '../../../infra/db/IDatabaseSQL';
-import {IProcessEnv} from '../../../infra/env/IEnvironment';
+import {IEnv} from '../../../infra/env/IEnvironment';
 import {ILogRecordEntity} from '../cntr/ILogRecordEntity';
 import {ILogRecordSqlRepository} from '../cntr/ILogRecordSqlRepository';
 
 interface IConstructor {
-  env: IProcessEnv;
+  env: IEnv;
   db: IDatabaseSQL;
 }
 
@@ -14,7 +14,7 @@ export default class LogRecordSqlRepository extends BaseSqlRepository implements
   readonly tag: string = 'LogRecordSqlRepository';
   readonly table: string = 'LogRecords';
 
-  private env: IProcessEnv;
+  private env: IEnv;
 
   constructor({db, env}: IConstructor) {
     super(db);
