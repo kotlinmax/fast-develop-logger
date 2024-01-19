@@ -7,11 +7,10 @@ import {ILogRecordEntity} from '../../cntr/ILogRecordEntity';
 import {ILogRecordHttpService} from '../../cntr/services/ILogRecordHttpService';
 import {ILogRecordSqlRepository} from '../../cntr/ILogRecordSqlRepository';
 import {IEmitter} from '../../../../infra/emitter/IEmitter';
+import {TControllerInfrastructure} from '../../../../infra';
 
-interface LogRecordHttpServiceConstructor {
-  env: IEnv;
-  logger: ILogger;
-  repository: ILogRecordSqlRepository;
+interface IConstructor extends TControllerInfrastructure {
+  logRecordRepository: ILogRecordSqlRepository;
 }
 
 export default class LogRecordHttpService extends BaseHttpService implements ILogRecordHttpService {
@@ -22,11 +21,13 @@ export default class LogRecordHttpService extends BaseHttpService implements ILo
   private logger: ILogger;
   private emitter: IEmitter;
 
-  constructor({env, logger, repository}: LogRecordHttpServiceConstructor) {
+  constructor(opts: IConstructor) {
     super();
-    this.env = env;
-    this.logger = logger;
-    this.repository = repository;
+
+    this.env = opts.env;
+    this.emitter = opts.emitter;
+    this.logger = opts.logger;
+    this.repository = opts.logRecordRepository;
   }
 
   public listenDatabase(channel: string, callback: TCallback) {

@@ -1,3 +1,5 @@
+import {asClass, asValue, createContainer} from 'awilix';
+
 import {IModuleConstructor} from '../ICommon';
 import {ILogRecordWsRouter} from './cntr/routes/ILogRecordWsRouter';
 import {ILogRecordHttpRouter} from './cntr/routes/ILogRecordHttpRouter';
@@ -5,8 +7,13 @@ import {IBaseQueueConsumer} from '../../bases/cntr/IBaseQueueConsumer';
 import {ILogRecordHttpService} from './cntr/services/ILogRecordHttpService';
 import {ILogRecordQueueService} from './cntr/services/ILogRecordQueueService';
 import {ILogRecordWsService} from './cntr/services/ILogRecordWsService';
+import {ILogRecordModule} from './cntr/ILogRecordModule';
+import {ILogRecordQueueController} from './cntr/controllers/ILogRecordQueueController';
+import {ILogRecordHttpController} from './cntr/controllers/ILogRecordHttpController';
+import {ILogRecordWsController} from './cntr/controllers/ILogRecordWsController';
+import {ILogRecordQueueConsumer} from './cntr/ILogRecordQueueConsumer';
 
-import BaseModule from '../../bases';
+import BaseModule from '../../bases/cntr/IBaseModule';
 import LogRecordWsRouter from './impl/routes/LogRecordWsRouter';
 import LogRecordWsController from './impl/controllers/LogRecordWsController';
 import LogRecordHttpRouter from './impl/routes/LogRecordHttpRouter';
@@ -18,8 +25,6 @@ import LogRecordQueueService from './impl/services/LogRecordQueueService';
 import LogRecordWsService from './impl/services/LogRecordWsService';
 import LogRecordQueueController from './impl/controllers/LogRecordQueueController';
 
-export interface ILogRecordModule extends BaseModule {}
-
 export default class LogRecordModule extends BaseModule implements ILogRecordModule {
   readonly tag: string = 'LogRecordModule';
 
@@ -30,27 +35,42 @@ export default class LogRecordModule extends BaseModule implements ILogRecordMod
   constructor(infra: IModuleConstructor) {
     super();
 
-    // ONE REPO FOR ALL SERVICE
-    const repository = new LogRecordSqlRepository(infra);
+    const module = createContainer();
 
-    // SERVICES
-    const infraService = {...infra, repository};
-    const queueService: ILogRecordQueueService = new LogRecordQueueService(infraService);
-    const httpService: ILogRecordHttpService = new LogRecordHttpService(infraService);
-    const wsService: ILogRecordWsService = new LogRecordWsService(infraService);
+    // prettier-ignore
+    module.register({
+      db:       asValue(infra.db)     ,
+      env:      asValue(infra.env)    ,
+      emitter:  asValue(infra.emitter),
+      logger:   asValue(infra.logger) ,
+    });
 
-    // CONTROLLERS
-    const queueController = new LogRecordQueueController(queueService);
-    const httpController = new LogRecordHttpController(httpService);
-    const wsController = new LogRecordWsController(wsService);
+    // prettier-ignore
+    module.register({
+      logRecordRepository:      asClass(LogRecordSqlRepository)   ,
+      logRecordHttpController:  asClass(LogRecordHttpController)  ,
+      logRecordHttpService:     asClass(LogRecordHttpService)     ,
+      logRecordHttpRouter:      asClass(LogRecordHttpRouter)      ,
+      logRecordQueueController: asClass(LogRecordQueueController) ,
+      logRecordQueueService:    asClass(LogRecordQueueService)    ,
+      logRecordQueueConsumer:   asClass(LogRecordQueueConsumer)   ,
+      logRecordWsController:    asClass(LogRecordWsController)    ,
+      logRecordWsService:       asClass(LogRecordWsService)       ,
+      logRecordWsRouter:        asClass(LogRecordWsRouter)        ,
+    });
 
-    // TODO consumer same ws (actions or type message)
-    const infraConsumer = {...infra, service: queueService};
-    const consumer = new LogRecordQueueConsumer(infraConsumer);
+    module.resolve<ILogRecordHttpRouter>('logRecordRepository');
+    module.resolve<ILogRecordHttpController>('logRecordHttpController');
+    module.resolve<ILogRecordHttpService>('logRecordHttpService');
+    module.resolve<ILogRecordHttpRouter>('logRecordHttpRouter');
+    module.resolve<ILogRecordQueueController>('logRecordQueueController');
+    module.resolve<ILogRecordQueueService>('logRecordQueueService');
+    module.resolve<ILogRecordWsController>('logRecordWsController');
+    module.resolve<ILogRecordWsService>('logRecordWsService');
+    module.resolve<ILogRecordWsRouter>('logRecordWsRouter');
 
-    this.httpRouter = new LogRecordHttpRouter(httpController);
-    this.wsRouter = new LogRecordWsRouter(wsController);
-
-    this.consumers = [consumer];
+    this.httpRouter = module.resolve<ILogRecordHttpRouter>('logRecordHttpRouter');
+    this.wsRouter = module.resolve<ILogRecordWsRouter>('logRecordWsRouter');
+    this.consumers = [module.resolve<ILogRecordQueueConsumer>('logRecordQueueConsumer')];
   }
 }

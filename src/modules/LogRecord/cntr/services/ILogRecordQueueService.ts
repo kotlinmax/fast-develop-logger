@@ -4,7 +4,6 @@ import {TCallback, TWsSubscribeCallback} from '../../../../infra/servers/cnrt/IW
 import {ILogRecordEntity} from '../ILogRecordEntity';
 
 export interface ILogRecordQueueService extends IBaseQueueService {
-  env: IEnv;
   listenDatabase: TWsSubscribeCallback;
   listenQueue: (callback: TCallback) => Promise<void>;
   getLogRecordById(id: string): Promise<ILogRecordEntity[]>;

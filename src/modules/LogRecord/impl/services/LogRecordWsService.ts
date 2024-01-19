@@ -6,25 +6,27 @@ import {ILogger} from '../../../../infra/logger/ILogger';
 import {ILogRecordEntity} from '../../cntr/ILogRecordEntity';
 import {ILogRecordWsService} from '../../cntr/services/ILogRecordWsService';
 import {ILogRecordSqlRepository} from '../../cntr/ILogRecordSqlRepository';
+import {TServiceInfrastructure} from '../../../../infra';
+import {IEmitter} from '../../../../infra/emitter/IEmitter';
 
-interface LogRecordWsServiceConstructor {
-  env: IEnv;
-  logger: ILogger;
-  repository: ILogRecordSqlRepository;
+interface IConstructor extends TServiceInfrastructure {
+  logRecordRepository: ILogRecordSqlRepository;
 }
 
 export default class LogRecordWsService extends BaseWsService implements ILogRecordWsService {
   readonly tag: string = 'LogRecordWsService';
 
-  private repository: ILogRecordSqlRepository;
   private env: IEnv;
   private logger: ILogger;
+  private emitter: IEmitter;
+  private repository: ILogRecordSqlRepository;
 
-  constructor({env, logger, repository}: LogRecordWsServiceConstructor) {
+  constructor(opts: IConstructor) {
     super();
-    this.env = env;
-    this.logger = logger;
-    this.repository = repository;
+    this.env = opts.env;
+    this.logger = opts.logger;
+    this.emitter = opts.emitter;
+    this.repository = opts.logRecordRepository;
   }
 
   public listenDatabase(channel: string, callback: TCallback) {

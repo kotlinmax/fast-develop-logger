@@ -1,24 +1,27 @@
 import BaseSqlRepository from '../../../bases/impl/BaseSqlRepository';
 
-import {IDatabaseSQL} from '../../../infra/db/IDatabaseSQL';
+import {TRepositoryInfrastructure} from '../../../infra';
+import {IEmitter} from '../../../infra/emitter/IEmitter';
 import {IEnv} from '../../../infra/env/IEnvironment';
+import {ILogger} from '../../../infra/logger/ILogger';
 import {ILogRecordEntity} from '../cntr/ILogRecordEntity';
 import {ILogRecordSqlRepository} from '../cntr/ILogRecordSqlRepository';
 
-interface IConstructor {
-  env: IEnv;
-  db: IDatabaseSQL;
-}
+interface IConstructor extends TRepositoryInfrastructure {}
 
 export default class LogRecordSqlRepository extends BaseSqlRepository implements ILogRecordSqlRepository {
   readonly tag: string = 'LogRecordSqlRepository';
   readonly table: string = 'LogRecords';
 
   private env: IEnv;
+  private logger: ILogger;
+  private emitter: IEmitter;
 
-  constructor({db, env}: IConstructor) {
-    super(db);
-    this.env = env;
+  constructor(opts: IConstructor) {
+    super(opts.db);
+    this.env = opts.env;
+    this.logger = opts.logger;
+    this.emitter = opts.emitter;
   }
 
   async createBatch(rows: ILogRecordEntity[]): Promise<{id: string}[]> {

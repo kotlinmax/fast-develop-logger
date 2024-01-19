@@ -6,25 +6,27 @@ import {ILogger} from '../../../../infra/logger/ILogger';
 import {ILogRecordEntity} from '../../cntr/ILogRecordEntity';
 import {ILogRecordQueueService} from '../../cntr/services/ILogRecordQueueService';
 import {ILogRecordSqlRepository} from '../../cntr/ILogRecordSqlRepository';
+import {TServiceInfrastructure} from '../../../../infra';
+import {IEmitter} from '../../../../infra/emitter/IEmitter';
 
-interface LogRecordQueueServiceConstructor {
-  env: IEnv;
-  logger: ILogger;
-  repository: ILogRecordSqlRepository;
+interface IConstructor extends TServiceInfrastructure {
+  logRecordRepository: ILogRecordSqlRepository;
 }
 
 export default class LogRecordQueueService extends BaseQueueService implements ILogRecordQueueService {
   readonly tag: string = 'LogRecordQueueService';
 
+  private env: IEnv;
+  private logger: ILogger;
+  private emitter: IEmitter;
   private repository: ILogRecordSqlRepository;
-  readonly env: IEnv;
-  readonly logger: ILogger;
 
-  constructor(infra: LogRecordQueueServiceConstructor) {
+  constructor(opts: IConstructor) {
     super();
-    this.env = infra.env;
-    this.logger = infra.logger;
-    this.repository = infra.repository;
+    this.env = opts.env;
+    this.logger = opts.logger;
+    this.emitter = opts.emitter;
+    this.repository = opts.logRecordRepository;
   }
 
   public listenDatabase(channel: string, callback: TCallback) {

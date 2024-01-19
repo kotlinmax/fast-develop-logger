@@ -6,17 +6,21 @@ import {IEachMessagePayload} from '../../ICommon';
 import {ILogRecordEntity} from '../cntr/ILogRecordEntity';
 import {TCallback} from '../../../infra/servers/cnrt/IWsServer';
 import {ILogRecordQueueConsumer} from '../cntr/ILogRecordQueueConsumer';
-import {IBaseQueueConsumerConstructor} from '../../../bases/cntr/IBaseQueueConsumer';
 import {ILogRecordQueueService} from '../cntr/services/ILogRecordQueueService';
+import {IEnv} from '../../../infra/env/IEnvironment';
+import {TConsumerInfrastructure} from '../../../infra';
+import {IEmitter} from '../../../infra/emitter/IEmitter';
 
-interface IConstructor extends IBaseQueueConsumerConstructor {
-  service: ILogRecordQueueService;
+interface IConstructor extends TConsumerInfrastructure {
+  logRecordQueueService: ILogRecordQueueService;
 }
 
 export default class LogRecordQueueConsumer extends BaseQueueConsumer implements ILogRecordQueueConsumer {
   readonly tag: string = 'LogRecordQueueConsumer';
 
+  private env: IEnv;
   private logger: ILogger;
+  private emitter: IEmitter;
   private service: ILogRecordQueueService;
 
   private batch: ILogRecordEntity[] = [];
@@ -25,16 +29,18 @@ export default class LogRecordQueueConsumer extends BaseQueueConsumer implements
   private lastQueueMessageTime = Date.now();
   private interval = 1000;
 
-  constructor({env, logger, service}: IConstructor) {
+  constructor(opts: IConstructor) {
     super({
-      brokers: [env.LOG_RECORD_CONSUMER_BROKER],
-      groupId: env.LOG_RECORD_CONSUMER_GROUP_ID,
-      clientId: env.LOG_RECORD_CONSUMER_CLIENT_ID,
-      topic: env.LOG_RECORD_CONSUMER_TOPIC,
+      brokers: [opts.env.LOG_RECORD_CONSUMER_BROKER],
+      groupId: opts.env.LOG_RECORD_CONSUMER_GROUP_ID,
+      clientId: opts.env.LOG_RECORD_CONSUMER_CLIENT_ID,
+      topic: opts.env.LOG_RECORD_CONSUMER_TOPIC,
     });
 
-    this.logger = logger;
-    this.service = service;
+    this.env = opts.env;
+    this.logger = opts.logger;
+    this.emitter = opts.emitter;
+    this.service = opts.logRecordQueueService;
   }
 
   override async eachMessageHandler(payload: IEachMessagePayload, callback?: TCallback): Promise<void> {
