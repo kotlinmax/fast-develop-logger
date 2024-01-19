@@ -16,6 +16,7 @@ export type TServiceInfrastructure = Omit<IInfrastructure, 'db' | 'httpServer' |
 export type TControllerInfrastructure = Omit<IInfrastructure, 'db' | 'httpServer' | 'wsServer'>;
 export type TRepositoryInfrastructure = Omit<IInfrastructure, 'httpServer' | 'wsServer'>;
 export type TConsumerInfrastructure = Omit<IInfrastructure, 'httpServer' | 'wsServer'>;
+export type TModuleInfrastructure = Omit<IInfrastructure, 'httpServer' | 'wsServer'>;
 
 export interface IInfrastructure {
   db: IDatabaseSQL;

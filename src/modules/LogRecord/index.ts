@@ -1,6 +1,5 @@
 import {asClass, asValue, createContainer} from 'awilix';
 
-import {IModuleConstructor} from '../ICommon';
 import {ILogRecordWsRouter} from './cntr/routes/ILogRecordWsRouter';
 import {ILogRecordHttpRouter} from './cntr/routes/ILogRecordHttpRouter';
 import {IBaseQueueConsumer} from '../../bases/cntr/IBaseQueueConsumer';
@@ -12,6 +11,7 @@ import {ILogRecordQueueController} from './cntr/controllers/ILogRecordQueueContr
 import {ILogRecordHttpController} from './cntr/controllers/ILogRecordHttpController';
 import {ILogRecordWsController} from './cntr/controllers/ILogRecordWsController';
 import {ILogRecordQueueConsumer} from './cntr/ILogRecordQueueConsumer';
+import {TModuleInfrastructure} from '../../infra';
 
 import BaseModule from '../../bases/cntr/IBaseModule';
 import LogRecordWsRouter from './impl/routes/LogRecordWsRouter';
@@ -32,7 +32,7 @@ export default class LogRecordModule extends BaseModule implements ILogRecordMod
   readonly wsRouter: ILogRecordWsRouter;
   readonly consumers: IBaseQueueConsumer[];
 
-  constructor(infra: IModuleConstructor) {
+  constructor(infra: TModuleInfrastructure) {
     super();
 
     const module = createContainer();
