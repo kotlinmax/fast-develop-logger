@@ -91,3 +91,4 @@ yarn test:e2e
 ## 📋 TODO
 
 - Testing
+- Queue Server batching

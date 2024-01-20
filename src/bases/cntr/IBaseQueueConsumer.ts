@@ -1,6 +1,5 @@
-import {IEnv} from '../../infra/env/IEnvironment';
-import {ILogger} from '../../infra/logger/ILogger';
+import {IBaseClass} from '..';
 
-export interface IBaseQueueConsumer {
+export interface IBaseQueueConsumer extends IBaseClass {
   run(): Promise<void>;
 }

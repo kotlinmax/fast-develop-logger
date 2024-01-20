@@ -1,3 +1,3 @@
-export interface IBaseHttpController {
-  tag: string;
-}
+import {IBaseClass} from '../..';
+
+export interface IBaseHttpController extends IBaseClass {}

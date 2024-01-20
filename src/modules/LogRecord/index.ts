@@ -32,12 +32,13 @@ export default class LogRecordModule extends BaseModule implements ILogRecordMod
   readonly wsRouter: ILogRecordWsRouter;
   readonly consumers: IBaseQueueConsumer[];
 
+  // prettier-ignore
   constructor(infra: TModuleInfrastructure) {
     super();
 
+    // Docs of IoC: https://www.npmjs.com/package/awilix
     const module = createContainer();
 
-    // prettier-ignore
     module.register({
       db:       asValue(infra.db)     ,
       env:      asValue(infra.env)    ,
@@ -45,32 +46,32 @@ export default class LogRecordModule extends BaseModule implements ILogRecordMod
       logger:   asValue(infra.logger) ,
     });
 
-    // prettier-ignore
     module.register({
-      logRecordRepository:      asClass(LogRecordSqlRepository)   ,
-      logRecordHttpController:  asClass(LogRecordHttpController)  ,
-      logRecordHttpService:     asClass(LogRecordHttpService)     ,
-      logRecordHttpRouter:      asClass(LogRecordHttpRouter)      ,
-      logRecordQueueController: asClass(LogRecordQueueController) ,
-      logRecordQueueService:    asClass(LogRecordQueueService)    ,
-      logRecordQueueConsumer:   asClass(LogRecordQueueConsumer)   ,
-      logRecordWsController:    asClass(LogRecordWsController)    ,
-      logRecordWsService:       asClass(LogRecordWsService)       ,
-      logRecordWsRouter:        asClass(LogRecordWsRouter)        ,
+      logRecordRepository     :  asClass(LogRecordSqlRepository    ).singleton(),
+      logRecordHttpController :  asClass(LogRecordHttpController   ).singleton(),
+      logRecordHttpService    :  asClass(LogRecordHttpService      ).singleton(),
+      logRecordHttpRouter     :  asClass(LogRecordHttpRouter       ).singleton(),
+      logRecordQueueController:  asClass(LogRecordQueueController  ).singleton(),
+      logRecordQueueService   :  asClass(LogRecordQueueService     ).singleton(),
+      logRecordQueueConsumer  :  asClass(LogRecordQueueConsumer    ).singleton(),
+      logRecordWsController   :  asClass(LogRecordWsController     ).singleton(),
+      logRecordWsService      :  asClass(LogRecordWsService        ).singleton(),
+      logRecordWsRouter       :  asClass(LogRecordWsRouter         ).singleton(),
     });
 
-    module.resolve<ILogRecordHttpRouter>('logRecordRepository');
-    module.resolve<ILogRecordHttpController>('logRecordHttpController');
-    module.resolve<ILogRecordHttpService>('logRecordHttpService');
-    module.resolve<ILogRecordHttpRouter>('logRecordHttpRouter');
-    module.resolve<ILogRecordQueueController>('logRecordQueueController');
-    module.resolve<ILogRecordQueueService>('logRecordQueueService');
-    module.resolve<ILogRecordWsController>('logRecordWsController');
-    module.resolve<ILogRecordWsService>('logRecordWsService');
-    module.resolve<ILogRecordWsRouter>('logRecordWsRouter');
+    module.resolve<ILogRecordHttpRouter     >  ('logRecordRepository'      );
+    module.resolve<ILogRecordHttpController >  ('logRecordHttpController'  );
+    module.resolve<ILogRecordHttpService    >  ('logRecordHttpService'     );
+    module.resolve<ILogRecordHttpRouter     >  ('logRecordHttpRouter'      );
+    module.resolve<ILogRecordQueueController>  ('logRecordQueueController' );
+    module.resolve<ILogRecordQueueService   >  ('logRecordQueueService'    );
+    module.resolve<ILogRecordWsController   >  ('logRecordWsController'    );
+    module.resolve<ILogRecordWsService      >  ('logRecordWsService'       );
+    module.resolve<ILogRecordWsRouter       >  ('logRecordWsRouter'        );
 
-    this.httpRouter = module.resolve<ILogRecordHttpRouter>('logRecordHttpRouter');
-    this.wsRouter = module.resolve<ILogRecordWsRouter>('logRecordWsRouter');
-    this.consumers = [module.resolve<ILogRecordQueueConsumer>('logRecordQueueConsumer')];
+    this.httpRouter =   module.resolve<ILogRecordHttpRouter>    ('logRecordHttpRouter'    );
+    this.wsRouter   =   module.resolve<ILogRecordWsRouter>      ('logRecordWsRouter'      );
+    this.consumers  = [ module.resolve<ILogRecordQueueConsumer> ('logRecordQueueConsumer' ) ] ;
+
   }
 }

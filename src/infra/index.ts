@@ -14,8 +14,9 @@ import {ILogger} from './logger/ILogger';
 
 export type TServiceInfrastructure = Omit<IInfrastructure, 'db' | 'httpServer' | 'wsServer'>;
 export type TControllerInfrastructure = Omit<IInfrastructure, 'db' | 'httpServer' | 'wsServer'>;
+export type TConsumerInfrastructure = Omit<IInfrastructure, 'db' | 'httpServer' | 'wsServer'>;
+export type TRouterInfrastructure = Omit<IInfrastructure, 'db' | 'httpServer' | 'wsServer'>;
 export type TRepositoryInfrastructure = Omit<IInfrastructure, 'httpServer' | 'wsServer'>;
-export type TConsumerInfrastructure = Omit<IInfrastructure, 'httpServer' | 'wsServer'>;
 export type TModuleInfrastructure = Omit<IInfrastructure, 'httpServer' | 'wsServer'>;
 
 export interface IInfrastructure {

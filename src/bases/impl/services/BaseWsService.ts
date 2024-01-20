@@ -1,5 +1,4 @@
+import BaseClass from '../..';
 import {IBaseWsService} from '../../cntr/services/IBaseWsService';
 
-export default abstract class BaseWsService implements IBaseWsService {
-  abstract readonly tag: string;
-}
+export default abstract class BaseWsService extends BaseClass implements IBaseWsService {}

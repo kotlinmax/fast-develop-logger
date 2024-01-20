@@ -1,5 +1,4 @@
+import BaseClass from '../..';
 import {IBaseWsController} from '../../cntr/controllers/IBaseWsController';
 
-export default abstract class BaseWsController implements IBaseWsController {
-  abstract readonly tag: string;
-}
+export default abstract class BaseWsController extends BaseClass implements IBaseWsController {}

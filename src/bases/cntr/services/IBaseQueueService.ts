@@ -1,3 +1,3 @@
-export interface IBaseQueueService {
-  tag: string;
-}
+import {IBaseClass} from '../..';
+
+export interface IBaseQueueService extends IBaseClass {}

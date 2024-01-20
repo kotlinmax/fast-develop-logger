@@ -1,5 +1,6 @@
-export interface IBaseSqlRepository {
-  tag: string;
+import {IBaseClass} from '..';
+
+export interface IBaseSqlRepository extends IBaseClass {
   query<T>(sql: string, values: unknown[]): Promise<T[]>;
   getById<T>(id: string, fields?: string[]): Promise<T[]>;
   create<T>({...record}: {[x: string]: unknown}): Promise<T[]>;

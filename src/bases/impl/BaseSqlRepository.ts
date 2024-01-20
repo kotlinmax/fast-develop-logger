@@ -1,12 +1,14 @@
+import BaseClass from '..';
 import {IDatabaseSQL} from '../../infra/db/IDatabaseSQL';
 import {TCallback} from '../../infra/servers/cnrt/IWsServer';
 import {IBaseSqlRepository} from '../cntr/IBaseSqlRepository';
 
-export default abstract class BaseSqlRepository implements IBaseSqlRepository {
-  abstract readonly tag: string;
+export default abstract class BaseSqlRepository extends BaseClass implements IBaseSqlRepository {
   abstract readonly table: string;
 
-  constructor(readonly db: IDatabaseSQL) {}
+  constructor(readonly db: IDatabaseSQL) {
+    super();
+  }
 
   public async listen(channel: string, callback: TCallback) {
     return this.db.listen(channel, callback);

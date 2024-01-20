@@ -1,3 +1,3 @@
-export interface IBaseEntity {
-  tag: string;
-}
+import {IBaseClass} from '..';
+
+export interface IBaseEntity extends IBaseClass {}

@@ -1,5 +1,6 @@
 import {type Consumer, type EachMessagePayload, Kafka} from 'kafkajs';
 import {IBaseQueueConsumer} from '../cntr/IBaseQueueConsumer';
+import BaseClass from '..';
 
 export interface IKafkaConfig {
   brokers: string[];
@@ -8,11 +9,12 @@ export interface IKafkaConfig {
   topic: string;
 }
 
-abstract class BaseQueueConsumer implements IBaseQueueConsumer {
+abstract class BaseQueueConsumer extends BaseClass implements IBaseQueueConsumer {
   private topic: string;
   private consumer: Consumer;
 
   constructor(config: IKafkaConfig) {
+    super();
     const {clientId, brokers, groupId, topic} = config;
     const queue = new Kafka({clientId, brokers});
 

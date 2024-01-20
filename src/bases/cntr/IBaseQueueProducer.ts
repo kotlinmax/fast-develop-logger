@@ -1,1 +1,3 @@
-export interface IBaseQueueProducer {}
+import {IBaseClass} from '..';
+
+export interface IBaseQueueProducer extends IBaseClass {}

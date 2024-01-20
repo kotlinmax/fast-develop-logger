@@ -1,3 +1,3 @@
-export interface IBaseWsService {
-  tag: string;
-}
+import {IBaseClass} from '../..';
+
+export interface IBaseWsService extends IBaseClass {}
