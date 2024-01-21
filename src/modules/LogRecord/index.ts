@@ -1,4 +1,3 @@
-import BaseModule from '../../bases/impl/BaseModule';
 import {asClass, asValue, createContainer} from 'awilix';
 
 import {TModuleInfrastructure     } from '../../infra';
@@ -14,6 +13,7 @@ import {ILogRecordQueueService    } from './cntr/services/ILogRecordQueueService
 import {ILogRecordHttpService     } from './cntr/services/ILogRecordHttpService';
 import {ILogRecordWsktService     } from './cntr/services/ILogRecordWsktService';
 
+import BaseModule                   from '../../bases/impl/BaseModule';
 import LogRecordSqlRepository       from './impl/LogRecordSqlRepository';
 import LogRecordQueueRouter         from './impl/routes/LogRecordQueueRouter';
 import LogRecordHttpRouter          from './impl/routes/LogRecordHttpRouter';
@@ -71,4 +71,3 @@ export default class LogRecordModule extends BaseModule implements ILogRecordMod
     this.wsktRouter  =  module.resolve<ILogRecordWsktRouter >  ('logRecordWsktRouter'  );
   }
 }
-// prettier-ignore-end
