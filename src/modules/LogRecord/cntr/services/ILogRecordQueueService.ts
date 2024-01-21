@@ -1,5 +1,4 @@
 import {IBaseQueueService} from '../../../../bases/cntr/services/IBaseQueueService';
-import {IEnv} from '../../../../infra/env/IEnvironment';
 import {TCallback, TWsktSubscribeCallback} from '../../../../infra/servers/cnrt/IWsktServer';
 import {ILogRecordEntity} from '../ILogRecordEntity';
 

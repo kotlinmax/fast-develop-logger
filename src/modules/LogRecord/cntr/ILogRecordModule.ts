@@ -1,3 +1,3 @@
-import BaseModule from '../../../bases/cntr/IBaseModule';
+import {IBaseModule} from '../../../bases/cntr/IBaseModule';
 
-export interface ILogRecordModule extends BaseModule {}
+export interface ILogRecordModule extends IBaseModule {}

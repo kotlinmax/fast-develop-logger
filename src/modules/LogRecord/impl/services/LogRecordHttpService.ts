@@ -1,6 +1,5 @@
 import BaseHttpService from '../../../../bases/impl/services/BaseHttpService';
 
-import {TCallback} from '../../../../infra/servers/cnrt/IWsktServer';
 import {IEnv} from '../../../../infra/env/IEnvironment';
 import {ILogger} from '../../../../infra/logger/ILogger';
 import {ILogRecordEntity} from '../../cntr/ILogRecordEntity';
@@ -8,6 +7,7 @@ import {ILogRecordHttpService} from '../../cntr/services/ILogRecordHttpService';
 import {ILogRecordSqlRepository} from '../../cntr/ILogRecordSqlRepository';
 import {IEmitter} from '../../../../infra/emitter/IEmitter';
 import {TControllerInfrastructure} from '../../../../infra';
+import {TCallback} from '../../../../infra/servers/cnrt/IWsktServer';
 
 interface IConstructor extends TControllerInfrastructure {
   logRecordRepository: ILogRecordSqlRepository;

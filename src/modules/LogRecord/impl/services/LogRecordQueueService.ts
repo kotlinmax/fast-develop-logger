@@ -1,6 +1,5 @@
 import BaseQueueService from '../../../../bases/impl/services/BaseQueueService';
 
-import {TCallback} from '../../../../infra/servers/cnrt/IWsktServer';
 import {IEnv} from '../../../../infra/env/IEnvironment';
 import {ILogger} from '../../../../infra/logger/ILogger';
 import {ILogRecordEntity} from '../../cntr/ILogRecordEntity';
@@ -8,6 +7,7 @@ import {ILogRecordQueueService} from '../../cntr/services/ILogRecordQueueService
 import {ILogRecordSqlRepository} from '../../cntr/ILogRecordSqlRepository';
 import {TServiceInfrastructure} from '../../../../infra';
 import {IEmitter} from '../../../../infra/emitter/IEmitter';
+import {TCallback} from '../../../../infra/servers/cnrt/IWsktServer';
 
 interface IConstructor extends TServiceInfrastructure {
   logRecordRepository: ILogRecordSqlRepository;

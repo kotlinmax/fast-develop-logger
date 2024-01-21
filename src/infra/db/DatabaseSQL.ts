@@ -1,6 +1,6 @@
 import {Pool, PoolConfig} from 'pg';
-import {TCallback, TWsUnsubscribe} from '../servers/cnrt/IWsktServer';
 import {IDatabaseSQL, IDatabaseTransaction} from './IDatabaseSQL';
+import {TCallback, TWsktUnsubscribe} from '../servers/cnrt/IWsktServer';
 
 export default class DatabaseSQL implements IDatabaseSQL {
   private pool: Pool;
@@ -32,7 +32,7 @@ export default class DatabaseSQL implements IDatabaseSQL {
     return {begin, commit, rollback, release, query};
   }
 
-  async listen(channel: string, callback: TCallback): TWsUnsubscribe {
+  async listen(channel: string, callback: TCallback): TWsktUnsubscribe {
     const connection = await this.pool.connect();
     await connection.query(`LISTEN "${channel}";`);
 

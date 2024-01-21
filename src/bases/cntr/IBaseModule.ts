@@ -1,4 +1,4 @@
-import BaseClass, {IBaseClass} from '..';
+import {IBaseClass} from '..';
 
 import {IBaseHttpRouter} from './routes/IBaseHttpRouter';
 import {IBaseWsktRouter} from './routes/IBaseWsktRouter';
