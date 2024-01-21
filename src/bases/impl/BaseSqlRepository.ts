@@ -1,6 +1,6 @@
 import BaseClass from '..';
 import {IDatabaseSQL} from '../../infra/db/IDatabaseSQL';
-import {TCallback} from '../../infra/servers/cnrt/IWsServer';
+import {TCallback} from '../../infra/servers/cnrt/IWsktServer';
 import {IBaseSqlRepository} from '../cntr/IBaseSqlRepository';
 
 export default abstract class BaseSqlRepository extends BaseClass implements IBaseSqlRepository {

@@ -1,5 +1,5 @@
 import {IBaseQueueConsumer} from '../../../bases/cntr/IBaseQueueConsumer';
-import {TCallback} from '../../../infra/servers/cnrt/IWsServer';
+import {TCallback} from '../../../infra/servers/cnrt/IWsktServer';
 import {IEachMessagePayload} from '../../ICommon';
 
 export interface ILogRecordQueueConsumer extends IBaseQueueConsumer {

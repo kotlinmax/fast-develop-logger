@@ -1,31 +1,31 @@
-import BaseWsController from '../../../../bases/impl/controllers/BaseWsController';
+import BaseWsktController from '../../../../bases/impl/controllers/BaseWsktController';
 
 import {TControllerInfrastructure} from '../../../../infra';
 import {IEmitter} from '../../../../infra/emitter/IEmitter';
 import {IEnv} from '../../../../infra/env/IEnvironment';
 import {ILogger} from '../../../../infra/logger/ILogger';
-import {TCallback} from '../../../../infra/servers/cnrt/IWsServer';
-import {ILogRecordWsController} from '../../cntr/controllers/ILogRecordWsController';
-import {ILogRecordWsService} from '../../cntr/services/ILogRecordWsService';
+import {TCallback} from '../../../../infra/servers/cnrt/IWsktServer';
+import {ILogRecordWsktController} from '../../cntr/controllers/ILogRecordWsktController';
+import {ILogRecordWsktService} from '../../cntr/services/ILogRecordWsktService';
 
 interface IConstructor extends TControllerInfrastructure {
-  logRecordWsService: ILogRecordWsService;
+  logRecordWsktService: ILogRecordWsktService;
 }
 
-export default class LogRecordWsController extends BaseWsController implements ILogRecordWsController {
-  readonly tag: string = 'LogRecordWsController';
+export default class LogRecordWsktController extends BaseWsktController implements ILogRecordWsktController {
+  readonly tag: string = 'LogRecordWsktController';
 
   private env: IEnv;
   private logger: ILogger;
   private emitter: IEmitter;
-  private service: ILogRecordWsService;
+  private service: ILogRecordWsktService;
 
   constructor(opts: IConstructor) {
     super();
     this.env = opts.env;
     this.logger = opts.logger;
     this.emitter = opts.emitter;
-    this.service = opts.logRecordWsService;
+    this.service = opts.logRecordWsktService;
   }
 
   public async listenDatabase(channel: string, cb: TCallback) {

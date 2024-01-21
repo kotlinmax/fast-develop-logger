@@ -1,10 +1,10 @@
-import BaseWsService from '../../../../bases/impl/services/BaseWsService';
+import BaseWsktService from '../../../../bases/impl/services/BaseWsktService';
 
-import {TCallback} from '../../../../infra/servers/cnrt/IWsServer';
+import {TCallback} from '../../../../infra/servers/cnrt/IWsktServer';
 import {IEnv} from '../../../../infra/env/IEnvironment';
 import {ILogger} from '../../../../infra/logger/ILogger';
 import {ILogRecordEntity} from '../../cntr/ILogRecordEntity';
-import {ILogRecordWsService} from '../../cntr/services/ILogRecordWsService';
+import {ILogRecordWsktService} from '../../cntr/services/ILogRecordWsktService';
 import {ILogRecordSqlRepository} from '../../cntr/ILogRecordSqlRepository';
 import {TServiceInfrastructure} from '../../../../infra';
 import {IEmitter} from '../../../../infra/emitter/IEmitter';
@@ -13,8 +13,8 @@ interface IConstructor extends TServiceInfrastructure {
   logRecordRepository: ILogRecordSqlRepository;
 }
 
-export default class LogRecordWsService extends BaseWsService implements ILogRecordWsService {
-  readonly tag: string = 'LogRecordWsService';
+export default class LogRecordWsktService extends BaseWsktService implements ILogRecordWsktService {
+  readonly tag: string = 'LogRecordWsktService';
 
   private env: IEnv;
   private logger: ILogger;

@@ -1,6 +1,6 @@
 import BaseHttpService from '../../../../bases/impl/services/BaseHttpService';
 
-import {TCallback} from '../../../../infra/servers/cnrt/IWsServer';
+import {TCallback} from '../../../../infra/servers/cnrt/IWsktServer';
 import {IEnv} from '../../../../infra/env/IEnvironment';
 import {ILogger} from '../../../../infra/logger/ILogger';
 import {ILogRecordEntity} from '../../cntr/ILogRecordEntity';

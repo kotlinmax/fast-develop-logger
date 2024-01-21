@@ -1,7 +1,7 @@
 import {IBaseClass} from '../..';
-import {IConsumerConfig} from '../../../infra/queue/cntr/IQueueConsumers';
+import {IConsumerConfig, IQueueRoutes} from '../../../infra/servers/cnrt/IQueueServer';
 
 export interface IBaseQueueRouter extends IBaseClass {
-  routes: any;
+  routes: IQueueRoutes;
   config: IConsumerConfig;
 }

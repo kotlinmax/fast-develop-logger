@@ -1,12 +1,22 @@
 import {Kafka} from 'kafkajs';
 import {IBaseQueueRouter} from '../../../bases/cntr/routes/IBaseQueueRouter';
+import {IQueueMsg, IQueueServer, TQueueRouterHandler} from '../cnrt/IQueueServer';
 
-export default class QueueServer {
-  private routers: IBaseQueueRouter[];
+export interface IBatchQueueRoute {
+  msgs: IQueueMsg[];
+  time: number;
+}
+
+export default class QueueServer implements IQueueServer {
+  private routers: IBaseQueueRouter[] = [];
+
+  private batchHandlersData = new Map<TQueueRouterHandler, IBatchQueueRoute>();
+  private batchQueueSize = 100;
+  private batchTimeInterval = 1000;
 
   constructor() {}
 
-  start() {
+  async start() {
     this.routers.forEach(async (router) => {
       const {clientId, brokers, groupId, topic} = router.config;
 
@@ -20,17 +30,41 @@ export default class QueueServer {
         eachMessage: async (payload) => {
           if (payload.message.value === null) return;
 
-          const json: string = payload.message.value.toString();
-          const msg = JSON.parse(json);
-          const cb = router.routes[msg.action];
+          const str: string = payload.message.value.toString();
+          const msg: IQueueMsg = JSON.parse(str);
+          const route = router.routes[msg.action];
 
-          cb();
+          if (!route.options.isBatching) {
+            route.handler(msg);
+            return;
+          }
+
+          const handler = this.batchHandlersData.get(route.handler);
+
+          if (!handler) {
+            this.batchHandlersData.set(route.handler, {
+              msgs: [msg],
+              time: Date.now(),
+            });
+            return;
+          }
+
+          handler.msgs.push(msg);
+
+          const isBatchFully = handler.msgs.length >= this.batchQueueSize;
+          const isTimeForSave = Date.now() >= handler.time + this.batchTimeInterval;
+
+          if (isBatchFully || isTimeForSave) {
+            route.handler([...handler.msgs]);
+            handler.msgs = [];
+            handler.time = Date.now();
+          }
         },
       });
     });
   }
 
-  registerRoutes(routers: IBaseQueueRouter[]) {
-    this.routers = routers;
+  registerRoutes(router: IBaseQueueRouter) {
+    this.routers.push(router);
   }
 }

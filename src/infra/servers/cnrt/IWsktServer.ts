@@ -1,6 +1,8 @@
+import {IBaseWsktRouter} from '../../../bases/cntr/routes/IBaseWsktRouter';
+
 export type TCallback = (msg: unknown) => void;
 export type TWsUnsubscribe = Promise<() => Promise<void>>;
-export type TWsSubscribeCallback = (channel: string, callback: TCallback) => TWsUnsubscribe;
+export type TWsktSubscribeCallback = (channel: string, callback: TCallback) => TWsUnsubscribe;
 
 export interface IWsRoutes {
   [key: string]: {
@@ -9,7 +11,7 @@ export interface IWsRoutes {
   };
 }
 
-export interface IWsServer {
-  registerRoutes: (routes: IWsRoutes) => void;
+export interface IWsktServer {
+  registerRoutes: (router: IBaseWsktRouter) => void;
   start: () => Promise<void>;
 }

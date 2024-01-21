@@ -1,20 +1,20 @@
-import BaseWsRouter from '../../../../bases/impl/routes/BaseWsRouter';
+import BaseWsktRouter from '../../../../bases/impl/routes/BaseWsktRouter';
 
-import {IWsRoutes, TCallback} from '../../../../infra/servers/cnrt/IWsServer';
-import {ILogRecordWsController} from '../../cntr/controllers/ILogRecordWsController';
-import {ILogRecordWsRouter} from '../../cntr/routes/ILogRecordWsRouter';
+import {IWsRoutes, TCallback} from '../../../../infra/servers/cnrt/IWsktServer';
+import {ILogRecordWsktController} from '../../cntr/controllers/ILogRecordWsktController';
+import {ILogRecordWsktRouter} from '../../cntr/routes/ILogRecordWsktRouter';
 
 interface IConstructor {
-  logRecordWsController: ILogRecordWsController;
+  logRecordWsktController: ILogRecordWsktController;
 }
 
-export default class LogRecordWsRouter extends BaseWsRouter implements ILogRecordWsRouter {
+export default class LogRecordWsRouter extends BaseWsktRouter implements ILogRecordWsktRouter {
   readonly tag: string = 'LogRecordWsRouter';
-  private controller: ILogRecordWsController;
+  private controller: ILogRecordWsktController;
 
   constructor(opts: IConstructor) {
     super();
-    this.controller = opts.logRecordWsController;
+    this.controller = opts.logRecordWsktController;
   }
 
   public get routes(): IWsRoutes {

@@ -1,9 +1,9 @@
 import {IBaseHttpService} from '../../../../bases/cntr/services/IBaseHttpService';
-import {TCallback, TWsSubscribeCallback} from '../../../../infra/servers/cnrt/IWsServer';
+import {TCallback, TWsktSubscribeCallback} from '../../../../infra/servers/cnrt/IWsktServer';
 import {ILogRecordEntity} from '../ILogRecordEntity';
 
 export interface ILogRecordHttpService extends IBaseHttpService {
-  listenDatabase: TWsSubscribeCallback;
+  listenDatabase: TWsktSubscribeCallback;
   listenQueue: (callback: TCallback) => Promise<void>;
   // getLogRecordById(id: string): Promise<ILogRecordEntity[]>;
   // createLogRecord(logRecord: ILogRecordEntity): Promise<{id: string}>;

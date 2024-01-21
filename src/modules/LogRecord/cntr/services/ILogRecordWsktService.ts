@@ -1,9 +1,9 @@
-import {IBaseWsService} from '../../../../bases/cntr/services/IBaseWsService';
-import {TCallback, TWsSubscribeCallback} from '../../../../infra/servers/cnrt/IWsServer';
+import {IBaseWsktService} from '../../../../bases/cntr/services/IBaseWsktService';
+import {TCallback, TWsktSubscribeCallback} from '../../../../infra/servers/cnrt/IWsktServer';
 import {ILogRecordEntity} from '../ILogRecordEntity';
 
-export interface ILogRecordWsService extends IBaseWsService {
-  listenDatabase: TWsSubscribeCallback;
+export interface ILogRecordWsktService extends IBaseWsktService {
+  listenDatabase: TWsktSubscribeCallback;
   listenQueue: (callback: TCallback) => Promise<void>;
   getLogRecordById(id: string): Promise<ILogRecordEntity[]>;
   createLogRecord(logRecord: ILogRecordEntity): Promise<{id: string}>;

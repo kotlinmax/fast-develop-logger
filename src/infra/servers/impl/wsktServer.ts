@@ -1,19 +1,18 @@
 import {AddressInfo, WebSocketServer as WSS} from 'ws';
-import {IWsRoutes, IWsServer} from '../cnrt/IWsServer';
+import {IWsRoutes, IWsktServer} from '../cnrt/IWsktServer';
 import {ILoggerFastify} from '../../logger/ILogger';
 import {IHttpServer} from '../cnrt/IHttpServer';
+import {IBaseWsktRouter} from '../../../bases/cntr/routes/IBaseWsktRouter';
 
 interface IWsServerConstructor {
   logger: ILoggerFastify;
   httpServer: IHttpServer;
 }
 
-export default class WebSocketServer implements IWsServer {
+export default class WebSocketServer implements IWsktServer {
   private wss: WSS;
-  private routes: IWsRoutes;
-
+  private routes: IWsRoutes = {};
   private logger: ILoggerFastify;
-
   private clientQueueListeners: Map<any, boolean> = new Map();
 
   constructor({httpServer, logger}: IWsServerConstructor) {
@@ -21,8 +20,8 @@ export default class WebSocketServer implements IWsServer {
     this.wss = new WSS({server: httpServer.app.server});
   }
 
-  public registerRoutes(routes: IWsRoutes) {
-    this.routes = routes;
+  public registerRoutes(router: IBaseWsktRouter) {
+    this.routes = {...this.routes, ...router.routes};
     this.logger.info(`[wss] routes registered`);
   }
 
@@ -54,33 +53,13 @@ export default class WebSocketServer implements IWsServer {
 
         const msg = JSON.parse(message.toString());
         const handler = route.actions[msg.action];
-        const channel = route.channels[msg.channel];
 
-        if (!handler || !channel) {
+        if (!handler) {
           ws.send(`Invalid action or channel`);
           return;
         }
 
-        if (msg.action === 'listenQueue') {
-          if (this.clientQueueListeners.has(ws)) {
-            ws.send(`You already listen ${channel}`);
-            return;
-          }
-
-          const unlisten = await handler(channel, (data: unknown) => {
-            ws.send(JSON.stringify(data));
-          });
-
-          this.clientQueueListeners.set(ws, true);
-
-          const removeSubscription = () => {
-            unlisten();
-            this.clientQueueListeners.delete(ws);
-          };
-
-          ws.on('close', removeSubscription);
-          ws.on('error', removeSubscription);
-        }
+        handler(msg);
       });
 
       ws.on('close', () => {

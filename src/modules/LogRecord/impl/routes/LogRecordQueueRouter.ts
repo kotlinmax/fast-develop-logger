@@ -32,6 +32,7 @@ export default class LogRecordQueueRouter extends BaseQueueRouter implements ILo
   public get routes(): IQueueRoutes {
     return {
       insertLogRecord: {
+        options: {isBatching: true},
         middlewares: [],
         handler: async () => {
           console.log('some-other-action');

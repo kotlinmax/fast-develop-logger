@@ -1,5 +1,5 @@
 import {Pool, PoolConfig} from 'pg';
-import {TCallback, TWsUnsubscribe} from '../servers/cnrt/IWsServer';
+import {TCallback, TWsUnsubscribe} from '../servers/cnrt/IWsktServer';
 import {IDatabaseSQL, IDatabaseTransaction} from './IDatabaseSQL';
 
 export default class DatabaseSQL implements IDatabaseSQL {

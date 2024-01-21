@@ -5,15 +5,15 @@ import infra from './infra';
 import LogRecordModule from './modules/LogRecord';
 
 function main() {
-  [new LogRecordModule(infra)].forEach(({httpRouter, wsRouter, consumers}) => {
-    consumers.forEach((consumer) => consumer.run());
-
-    infra.httpServer.registerRoutes(httpRouter.routes);
-    infra.wsServer.registerRoutes(wsRouter.routes);
+  [new LogRecordModule(infra)].forEach(({httpRouter, wsktRouter, queueRouter}) => {
+    infra.queueServer.registerRoutes(queueRouter);
+    infra.httpServer.registerRoutes(httpRouter);
+    infra.wsktServer.registerRoutes(wsktRouter);
   });
 
+  infra.queueServer.start();
   infra.httpServer.start();
-  infra.wsServer.start();
+  infra.wsktServer.start();
 
   process.on('unhandledRejection', (err) => {
     infra.logger.fatal(`Unhandled Rejection at: ${err}`);

@@ -3,21 +3,23 @@ import Environment from './env/Environment';
 import Emitter from './emitter/Emitter';
 import Logger from './logger/Logger';
 import HttpServer from './servers/impl/httpServer';
-import WsServer from './servers/impl/wsServer';
+import WsktServer from './servers/impl/wsktServer';
+import QueueServer from './servers/impl/queueServer';
 
 import {IDatabaseSQL} from './db/IDatabaseSQL';
 import {IHttpServer} from './servers/cnrt/IHttpServer';
-import {IWsServer} from './servers/cnrt/IWsServer';
+import {IWsktServer} from './servers/cnrt/IWsktServer';
+import {IQueueServer} from './servers/cnrt/IQueueServer';
 import {IEnv} from './env/IEnvironment';
 import {IEmitter} from './emitter/IEmitter';
 import {ILogger} from './logger/ILogger';
 
-export type TServiceInfrastructure = Omit<IInfrastructure, 'db' | 'httpServer' | 'wsServer'>;
-export type TControllerInfrastructure = Omit<IInfrastructure, 'db' | 'httpServer' | 'wsServer'>;
-export type TConsumerInfrastructure = Omit<IInfrastructure, 'db' | 'httpServer' | 'wsServer'>;
-export type TRouterInfrastructure = Omit<IInfrastructure, 'db' | 'httpServer' | 'wsServer'>;
-export type TRepositoryInfrastructure = Omit<IInfrastructure, 'httpServer' | 'wsServer'>;
-export type TModuleInfrastructure = Omit<IInfrastructure, 'httpServer' | 'wsServer'>;
+export type TServiceInfrastructure = Omit<IInfrastructure, 'db' | 'httpServer' | 'wsktServer'>;
+export type TControllerInfrastructure = Omit<IInfrastructure, 'db' | 'httpServer' | 'wsktServer'>;
+export type TConsumerInfrastructure = Omit<IInfrastructure, 'db' | 'httpServer' | 'wsktServer'>;
+export type TRouterInfrastructure = Omit<IInfrastructure, 'db' | 'httpServer' | 'wsktServer'>;
+export type TRepositoryInfrastructure = Omit<IInfrastructure, 'httpServer' | 'wsktServer'>;
+export type TModuleInfrastructure = Omit<IInfrastructure, 'httpServer' | 'wsktServer'>;
 
 export interface IInfrastructure {
   db: IDatabaseSQL;
@@ -25,14 +27,17 @@ export interface IInfrastructure {
   logger: ILogger;
   emitter: IEmitter;
   httpServer: IHttpServer;
-  wsServer: IWsServer;
+  wsktServer: IWsktServer;
+  queueServer: IQueueServer;
 }
 
 const env = Environment.getEnv();
 const logger = new Logger();
 const emitter = new Emitter();
+
 const httpServer = new HttpServer(logger);
-const wsServer = new WsServer({logger, httpServer});
+const wsktServer = new WsktServer({logger, httpServer});
+const queueServer = new QueueServer();
 
 const db = new DatabaseSQL({
   database: env.POSTGRES_DB,
@@ -43,6 +48,6 @@ const db = new DatabaseSQL({
   max: Number(env.POSTGRES_MAX),
 });
 
-const infra: IInfrastructure = {db, env, logger, emitter, httpServer, wsServer};
+const infra: IInfrastructure = {db, env, logger, emitter, httpServer, wsktServer, queueServer};
 
 export default infra;

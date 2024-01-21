@@ -10,4 +10,4 @@ node_modules/
 .github/
 # Ignore all HTML files:
 *.html
-
+src/modules/*/index.ts
