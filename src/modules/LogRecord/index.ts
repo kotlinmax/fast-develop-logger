@@ -58,16 +58,16 @@ export default class LogRecordModule extends BaseModule implements ILogRecordMod
       logRecordWsktController :  asClass(LogRecordWsktController  ).singleton(),
     });
 
-    module.resolve<ILogRecordSqlRepository  >  ('logRecordRepository'      );
-    module.resolve<ILogRecordQueueController>  ('logRecordQueueController' );
-    module.resolve<ILogRecordHttpController >  ('logRecordHttpController'  );
-    module.resolve<ILogRecordWsktController >  ('logRecordWsktController'  );
-    module.resolve<ILogRecordQueueService   >  ('logRecordQueueService'    );
-    module.resolve<ILogRecordHttpService    >  ('logRecordHttpService'     );
-    module.resolve<ILogRecordWsktService    >  ('logRecordWsktService'     );
+    module.resolve<ILogRecordSqlRepository  > ('logRecordRepository'      );
+    module.resolve<ILogRecordQueueController> ('logRecordQueueController' );
+    module.resolve<ILogRecordHttpController > ('logRecordHttpController'  );
+    module.resolve<ILogRecordWsktController > ('logRecordWsktController'  );
+    module.resolve<ILogRecordQueueService   > ('logRecordQueueService'    );
+    module.resolve<ILogRecordHttpService    > ('logRecordHttpService'     );
+    module.resolve<ILogRecordWsktService    > ('logRecordWsktService'     );
 
-    this.queueRouter =  module.resolve<ILogRecordQueueRouter>  ('logRecordQueueRouter' );
-    this.httpRouter  =  module.resolve<ILogRecordHttpRouter >  ('logRecordHttpRouter'  );
-    this.wsktRouter  =  module.resolve<ILogRecordWsktRouter >  ('logRecordWsktRouter'  );
+    this.queueRouter =  module.resolve<ILogRecordQueueRouter> ('logRecordQueueRouter' );
+    this.httpRouter  =  module.resolve<ILogRecordHttpRouter > ('logRecordHttpRouter'  );
+    this.wsktRouter  =  module.resolve<ILogRecordWsktRouter > ('logRecordWsktRouter'  );
   }
 }
