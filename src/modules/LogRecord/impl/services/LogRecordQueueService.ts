@@ -8,9 +8,11 @@ import {ILogRecordSqlRepository} from '../../cntr/ILogRecordSqlRepository';
 import {TServiceInfrastructure} from '../../../../infra';
 import {IEmitter} from '../../../../infra/emitter/IEmitter';
 import {TCallback} from '../../../../infra/servers/cnrt/IWsktServer';
+import {ILogRecordEvents} from '../../cntr/ILogRecordEvents';
 
 interface IConstructor extends TServiceInfrastructure {
   logRecordRepository: ILogRecordSqlRepository;
+  logRecordEvents: ILogRecordEvents;
 }
 
 export default class LogRecordQueueService extends BaseQueueService implements ILogRecordQueueService {
@@ -20,6 +22,7 @@ export default class LogRecordQueueService extends BaseQueueService implements I
   private logger: ILogger;
   private emitter: IEmitter;
   private repository: ILogRecordSqlRepository;
+  private events: ILogRecordEvents;
 
   constructor(opts: IConstructor) {
     super();
@@ -27,6 +30,7 @@ export default class LogRecordQueueService extends BaseQueueService implements I
     this.logger = opts.logger;
     this.emitter = opts.emitter;
     this.repository = opts.logRecordRepository;
+    this.events = opts.logRecordEvents;
   }
 
   public listenDatabase(channel: string, callback: TCallback) {
@@ -42,7 +46,8 @@ export default class LogRecordQueueService extends BaseQueueService implements I
   }
 
   public async createLogRecord(row: ILogRecordEntity): Promise<{id: string}> {
-    throw new Error('Method not implemented.');
+    this.emitter.emit(this.events.LISTEN_QUEUE_CONSUMER);
+    return {id: '1'};
   }
 
   public async createBatchLogRecords(rows: ILogRecordEntity[]): Promise<{id: string}[]> {

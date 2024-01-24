@@ -6,11 +6,13 @@ import {ILogger} from '../../../../infra/logger/ILogger';
 import {ILogRecordEntity} from '../../cntr/ILogRecordEntity';
 import {ILogRecordWsktService} from '../../cntr/services/ILogRecordWsktService';
 import {ILogRecordSqlRepository} from '../../cntr/ILogRecordSqlRepository';
-import {TServiceInfrastructure} from '../../../../infra';
 import {IEmitter} from '../../../../infra/emitter/IEmitter';
+import {TServiceInfrastructure} from '../../../../infra';
+import {ILogRecordEvents} from '../../cntr/ILogRecordEvents';
 
 interface IConstructor extends TServiceInfrastructure {
   logRecordRepository: ILogRecordSqlRepository;
+  logRecordEvents: ILogRecordEvents;
 }
 
 export default class LogRecordWsktService extends BaseWsktService implements ILogRecordWsktService {
@@ -20,6 +22,7 @@ export default class LogRecordWsktService extends BaseWsktService implements ILo
   private logger: ILogger;
   private emitter: IEmitter;
   private repository: ILogRecordSqlRepository;
+  private events: ILogRecordEvents;
 
   constructor(opts: IConstructor) {
     super();
@@ -27,6 +30,7 @@ export default class LogRecordWsktService extends BaseWsktService implements ILo
     this.logger = opts.logger;
     this.emitter = opts.emitter;
     this.repository = opts.logRecordRepository;
+    this.events = opts.logRecordEvents;
   }
 
   public listenDatabase(channel: string, callback: TCallback) {
@@ -34,7 +38,7 @@ export default class LogRecordWsktService extends BaseWsktService implements ILo
   }
 
   public async listenQueue(callback: TCallback) {
-    // this.consumer.setCallback(callback);
+    this.emitter.on(this.events.LISTEN_QUEUE_CONSUMER, callback);
   }
 
   public async getLogRecordById(id: string): Promise<ILogRecordEntity[]> {

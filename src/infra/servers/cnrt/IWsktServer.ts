@@ -8,6 +8,7 @@ export interface IWsRoutes {
   [key: string]: {
     channels: Record<string, string>;
     actions: Record<string, Function | undefined>;
+    listeners: Record<string, Function | undefined>;
   };
 }
 

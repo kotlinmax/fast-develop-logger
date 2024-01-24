@@ -34,7 +34,7 @@ export default class WebSocketServer implements IWsktServer {
     this.wss.on('connection', async (ws, req) => {
       this.logger.debug('[wss] some connected to web socket server');
 
-      const domain = req.url?.replace('/', '');
+      const domain = req.url;
 
       if (!domain) {
         ws.close();
@@ -53,13 +53,22 @@ export default class WebSocketServer implements IWsktServer {
 
         const msg = JSON.parse(message.toString());
         const handler = route.actions[msg.action];
+        const listener = route.listeners[msg.listener];
 
-        if (!handler) {
-          ws.send(`Invalid action or channel`);
+        if (!handler && !listener) {
+          ws.send(`Invalid action or listener`);
           return;
         }
 
-        handler(msg);
+        if (handler) {
+          handler(msg);
+        }
+
+        if (listener) {
+          listener((data: unknown) => {
+            ws.send(String(data));
+          });
+        }
       });
 
       ws.on('close', () => {

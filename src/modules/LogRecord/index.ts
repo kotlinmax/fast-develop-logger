@@ -24,6 +24,8 @@ import LogRecordHttpController      from './impl/controllers/LogRecordHttpContro
 import LogRecordQueueService        from './impl/services/LogRecordQueueService';
 import LogRecordHttpService         from './impl/services/LogRecordHttpService';
 import LogRecordWsktService         from './impl/services/LogRecordWsktService';
+import LogRecordEvents from './impl/LogRecordEvents';
+import { ILogRecordEvents } from './cntr/ILogRecordEvents';
 
 export default class LogRecordModule extends BaseModule implements ILogRecordModule {
   readonly tag: string = 'LogRecordModule';
@@ -47,6 +49,7 @@ export default class LogRecordModule extends BaseModule implements ILogRecordMod
 
     module.register({
       logRecordRepository     :  asClass(LogRecordSqlRepository   ).singleton(),
+      logRecordEvents         :  asClass(LogRecordEvents          ).singleton(),
       logRecordQueueRouter    :  asClass(LogRecordQueueRouter     ).singleton(),
       logRecordHttpRouter     :  asClass(LogRecordHttpRouter      ).singleton(),
       logRecordWsktRouter     :  asClass(LogRecordWsRouter        ).singleton(),
@@ -59,6 +62,7 @@ export default class LogRecordModule extends BaseModule implements ILogRecordMod
     });
 
     module.resolve<ILogRecordSqlRepository  > ('logRecordRepository'      );
+    module.resolve<ILogRecordEvents         > ('logRecordEvents'          );
     module.resolve<ILogRecordQueueController> ('logRecordQueueController' );
     module.resolve<ILogRecordHttpController > ('logRecordHttpController'  );
     module.resolve<ILogRecordWsktController > ('logRecordWsktController'  );

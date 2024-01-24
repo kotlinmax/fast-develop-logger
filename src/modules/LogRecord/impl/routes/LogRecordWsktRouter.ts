@@ -23,7 +23,8 @@ export default class LogRecordWsRouter extends BaseWsktRouter implements ILogRec
         channels: {
           1: 'logRecordsInsertChannel',
         },
-        actions: {
+        actions: {},
+        listeners: {
           listenDatabase: async (channel: string, cb: TCallback) => {
             return this.controller.listenDatabase(channel, cb);
           },
