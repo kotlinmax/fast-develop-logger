@@ -2,9 +2,9 @@ import DatabaseSQL from './db/DatabaseSQL';
 import Environment from './env/Environment';
 import Emitter from './emitter/Emitter';
 import Logger from './logger/Logger';
-import HttpServer from './servers/impl/httpServer';
-import WsktServer from './servers/impl/wsktServer';
-import QueueServer from './servers/impl/queueServer';
+import HttpServer from './servers/impl/HttpServer';
+import WsktServer from './servers/impl/WsktServer';
+import QueueServer from './servers/impl/QueueServer';
 
 import {IDatabaseSQL} from './db/IDatabaseSQL';
 import {IHttpServer} from './servers/cnrt/IHttpServer';

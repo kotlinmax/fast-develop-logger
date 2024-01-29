@@ -46,7 +46,7 @@ export default class LogRecordQueueService extends BaseQueueService implements I
   }
 
   public async createLogRecord(row: ILogRecordEntity): Promise<{id: string}> {
-    this.emitter.emit(this.events.LISTEN_QUEUE_CONSUMER);
+    this.emitter.emit(this.events.LISTEN_QUEUE_CONSUMER, row);
     return {id: '1'};
   }
 

@@ -65,7 +65,9 @@ export default class WebSocketServer implements IWsktServer {
         }
 
         if (listener) {
+          this.logger.debug(`${listener}`);
           listener((data: unknown) => {
+            this.logger.debug(data);
             ws.send(String(data));
           });
         }

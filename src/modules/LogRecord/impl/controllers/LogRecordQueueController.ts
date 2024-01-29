@@ -7,6 +7,7 @@ import {ILogRecordQueueService} from '../../cntr/services/ILogRecordQueueService
 import {ILogger} from '../../../../infra/logger/ILogger';
 import {IEnv} from '../../../../infra/env/IEnvironment';
 import {IEmitter} from '../../../../infra/emitter/IEmitter';
+import {ILogRecordEntity} from '../../cntr/ILogRecordEntity';
 
 interface IConstructor extends TServiceInfrastructure {
   logRecordQueueService: ILogRecordQueueService;
@@ -32,8 +33,8 @@ export default class LogRecordQueueController extends BaseQueueController implem
     res.code(200).header('Content-Type', 'application/json; charset=utf-8').send({status: 'ok'});
   }
 
-  public async createLogRecord(req: IHttpRequest, res: IHttpResponse): Promise<void> {
-    res.code(200).header('Content-Type', 'application/json; charset=utf-8').send({status: 'ok'});
+  public async createLogRecord(raw: ILogRecordEntity): Promise<void> {
+    this.service.createLogRecord(raw);
   }
 
   public async handleWebSocketMessage(): Promise<void> {}

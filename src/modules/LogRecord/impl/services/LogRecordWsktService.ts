@@ -38,6 +38,7 @@ export default class LogRecordWsktService extends BaseWsktService implements ILo
   }
 
   public async listenQueue(callback: TCallback) {
+    this.logger.debug('TEST3');
     this.emitter.on(this.events.LISTEN_QUEUE_CONSUMER, callback);
   }
 

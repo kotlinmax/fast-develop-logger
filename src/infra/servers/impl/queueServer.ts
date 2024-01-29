@@ -3,7 +3,7 @@ import {IBaseQueueRouter} from '../../../bases/cntr/routes/IBaseQueueRouter';
 import {IQueueMsg, IQueueServer, TQueueRouterHandler} from '../cnrt/IQueueServer';
 
 export interface IBatchQueueRoute {
-  msgs: IQueueMsg[];
+  plds: IQueueMsg['payload'][];
   time: number;
 }
 
@@ -12,7 +12,7 @@ export default class QueueServer implements IQueueServer {
 
   private batchHandlersData = new Map<TQueueRouterHandler, IBatchQueueRoute>();
   private batchQueueSize = 100;
-  private batchTimeInterval = 1000;
+  private batchTimeInterval = 10000;
 
   constructor() {}
 
@@ -21,7 +21,7 @@ export default class QueueServer implements IQueueServer {
       const {clientId, brokers, groupId, topic} = router.config;
 
       const queue = new Kafka({clientId, brokers});
-      const consumer = queue.consumer({groupId});
+      const consumer = queue.consumer({groupId, maxWaitTimeInMs: 1000, minBytes: 100000});
 
       await consumer.connect();
       await consumer.subscribe({topic, fromBeginning: true});
@@ -29,13 +29,14 @@ export default class QueueServer implements IQueueServer {
       await consumer.run({
         eachMessage: async (payload) => {
           if (payload.message.value === null) return;
-
           const str: string = payload.message.value.toString();
           const msg: IQueueMsg = JSON.parse(str);
+
           const route = router.routes[msg.action];
+          if (!route) return;
 
           if (!route.options.isBatching) {
-            route.handler(msg);
+            route.handler(msg.payload);
             return;
           }
 
@@ -43,21 +44,23 @@ export default class QueueServer implements IQueueServer {
 
           if (!handler) {
             this.batchHandlersData.set(route.handler, {
-              msgs: [msg],
+              plds: [msg.payload],
               time: Date.now(),
             });
             return;
           }
 
-          handler.msgs.push(msg);
+          handler.plds.push(msg.payload);
 
-          const isBatchFully = handler.msgs.length >= this.batchQueueSize;
+          const isBatchFully = handler.plds.length >= this.batchQueueSize;
           const isTimeForSave = Date.now() >= handler.time + this.batchTimeInterval;
 
           if (isBatchFully || isTimeForSave) {
-            route.handler([...handler.msgs]);
-            handler.msgs = [];
-            handler.time = Date.now();
+            route.handler(handler.plds);
+            this.batchHandlersData.set(route.handler, {
+              plds: [],
+              time: Date.now(),
+            });
           }
         },
       });

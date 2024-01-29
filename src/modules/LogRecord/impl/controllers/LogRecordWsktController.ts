@@ -33,6 +33,7 @@ export default class LogRecordWsktController extends BaseWsktController implemen
   }
 
   public async listenQueue(cb: TCallback) {
+    this.logger.debug('TEST2');
     return this.service.listenQueue(cb);
   }
 }
