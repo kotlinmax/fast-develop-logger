@@ -10,9 +10,9 @@ export interface IBatchQueueRoute {
 export default class QueueServer implements IQueueServer {
   private routers: IBaseQueueRouter[] = [];
 
-  private batchHandlersData = new Map<TQueueRouterHandler, IBatchQueueRoute>();
-  private batchQueueSize = 100;
-  private batchTimeInterval = 10000;
+  private data = new Map<TQueueRouterHandler, IBatchQueueRoute>();
+  private size = 100;
+  private time = 10000;
 
   constructor() {}
 
@@ -29,6 +29,7 @@ export default class QueueServer implements IQueueServer {
       await consumer.run({
         eachMessage: async (payload) => {
           if (payload.message.value === null) return;
+
           const str: string = payload.message.value.toString();
           const msg: IQueueMsg = JSON.parse(str);
 
@@ -40,10 +41,11 @@ export default class QueueServer implements IQueueServer {
             return;
           }
 
-          const handler = this.batchHandlersData.get(route.handler);
+          // TODO check memory
+          const handler = this.data.get(route.handler);
 
           if (!handler) {
-            this.batchHandlersData.set(route.handler, {
+            this.data.set(route.handler, {
               plds: [msg.payload],
               time: Date.now(),
             });
@@ -52,12 +54,12 @@ export default class QueueServer implements IQueueServer {
 
           handler.plds.push(msg.payload);
 
-          const isBatchFully = handler.plds.length >= this.batchQueueSize;
-          const isTimeForSave = Date.now() >= handler.time + this.batchTimeInterval;
+          const isFull = handler.plds.length >= this.size;
+          const isTime = Date.now() >= handler.time + this.time;
 
-          if (isBatchFully || isTimeForSave) {
+          if (isFull || isTime) {
             route.handler(handler.plds);
-            this.batchHandlersData.set(route.handler, {
+            this.data.set(route.handler, {
               plds: [],
               time: Date.now(),
             });

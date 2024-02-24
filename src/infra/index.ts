@@ -18,7 +18,7 @@ export type TServiceInfrastructure = Omit<IInfrastructure, 'db' | 'httpServer' |
 export type TControllerInfrastructure = Omit<IInfrastructure, 'db' | 'httpServer' | 'wsktServer'>;
 export type TConsumerInfrastructure = Omit<IInfrastructure, 'db' | 'httpServer' | 'wsktServer'>;
 export type TRouterInfrastructure = Omit<IInfrastructure, 'db' | 'httpServer' | 'wsktServer'>;
-export type TRepositoryInfrastructure = Omit<IInfrastructure, 'httpServer' | 'wsktServer'>;
+export type TRepositoryInfrastructure = Omit<IInfrastructure, 'httpServer' | 'wsktServer' | 'queueServer'>;
 export type TModuleInfrastructure = Omit<IInfrastructure, 'httpServer' | 'wsktServer'>;
 
 export interface IInfrastructure {

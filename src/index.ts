@@ -32,7 +32,7 @@ async function main() {
   });
 
   await Promise.all([infra.queueServer.start(), infra.httpServer.start(), infra.wsktServer.start()]);
-  await startProducer();
+  // await startProducer();
 
   process.on('unhandledRejection', (err) => {
     infra.logger.fatal(`Unhandled Rejection at: ${err}`);
